@@ -1,0 +1,42 @@
+# Local/runtime noise
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+*.log
+.codex-html-print-profile/
+.codex-pdf-profile-*/
+
+# Python / Node build artifacts
+__pycache__/
+*.py[cod]
+node_modules/
+dist/
+build/
+.vite/
+
+# Office and generated binary artifacts that may contain clinical or sensitive data
+*.xlsx
+*.xlsm
+*.xls
+*.csv
+*.tsv
+*.docx
+*.doc
+*.pptx
+*.ppt
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.mov
+*.avi
+*.webm
+
+# Local clinical databases / exports should never be committed by default
+Base_Datos_*.xlsx
+Base Datos_*.xlsx
+*_demo.csv
+outputs/
