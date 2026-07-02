@@ -1,0 +1,19 @@
+{
+  "name": "hs-valme-hub",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hub clinico unificado de Hidradenitis Supurativa para el Hospital Universitario de Valme.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "vendor": "node scripts/vendorize.mjs"
+  },
+  "devDependencies": {
+    "chart.js": "^4.4.3",
+    "lucide-static": "^0.400.0",
+    "vite": "^5.4.0",
+    "xlsx": "^0.18.5"
+  }
+}
