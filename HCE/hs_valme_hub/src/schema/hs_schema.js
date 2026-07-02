@@ -205,8 +205,7 @@ export function buildHeadersHS() {
     'eco_abscesos',
     'eco_fistulas',
     'eco_ihs4',
-    'eco_gravedad',
-    'eco_doppler'
+    'eco_gravedad'
   );
 
   for (let i = 1; i <= DLQI_ITEMS.length; i += 1) headers.push(`dlqi_q${i}`);

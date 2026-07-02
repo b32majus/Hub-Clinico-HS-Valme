@@ -79,7 +79,39 @@ const PROMS_COLUMNS = [
   { key: 'dlqi_interpretacion', label: 'DLQI interp.' },
   { key: 'hsqol_total', label: 'HSQoL' },
   { key: 'hsqol_interpretacion', label: 'HSQoL interp.' },
-  { key: 'eva_dolor', label: 'EVA dolor' }
+  { key: 'eva_dolor', label: 'EVA dolor' },
+  { key: 'eva_prurito', label: 'EVA prurito' },
+  { key: 'eva_olor', label: 'EVA olor' },
+  { key: 'eva_supuracion', label: 'EVA supuracion' }
+];
+
+const FLARES_COLUMNS = [
+  { key: 'fecha_visita', label: 'Fecha', format: formatDate },
+  { key: 'flares_total_ultimo_anio', label: 'Brotes ultimo año' },
+  { key: 'flares_desde_ultima_visita', label: 'Brotes desde ultima visita' },
+  { key: 'flares_requirio_urgencias', label: 'Requirio urgencias' },
+  { key: 'flares_requirio_cirugia', label: 'Requirio cirugia' },
+  { key: 'flares_requirio_antibioticos', label: 'Requirio antibioticos' }
+];
+
+const ULTRASOUND_COLUMNS = [
+  { key: 'fecha_visita', label: 'Fecha', format: formatDate },
+  { key: 'eco_nodulos', label: 'Nodulos' },
+  { key: 'eco_abscesos', label: 'Abscesos' },
+  { key: 'eco_fistulas', label: 'Fistulas' },
+  { key: 'eco_ihs4', label: 'Eco IHS-4' },
+  { key: 'eco_gravedad', label: 'Eco gravedad' },
+  { key: 'eco_hallazgos', label: 'Hallazgos' }
+];
+
+const TOXIC_HABITS_COLUMNS = [
+  { key: 'fecha_visita', label: 'Fecha', format: formatDate },
+  { key: 'fumador_estado', label: 'Tabaco' },
+  { key: 'exfumador_anios', label: 'Años sin fumar' },
+  { key: 'alcohol_consume', label: 'Alcohol' },
+  { key: 'alcohol_cervezas_vino_semana', label: 'Cervezas/vino semana' },
+  { key: 'alcohol_copas_destilados_semana', label: 'Copas destilados semana' },
+  { key: 'alcohol_ube_semana', label: 'UBE semana' }
 ];
 
 const SURGERY_COLUMNS = [
@@ -218,6 +250,36 @@ export function createLongitudinalView() {
     }, promsLineOptions());
   }
 
+  function renderFlares(rows) {
+    const any = rows.some(r =>
+      r.flares_total_ultimo_anio !== '' ||
+      r.flares_desde_ultima_visita !== '' ||
+      r.flares_requirio_urgencias !== '' ||
+      r.flares_requirio_cirugia !== '' ||
+      r.flares_requirio_antibioticos !== ''
+    );
+    const body = any ? renderTable(rows, FLARES_COLUMNS) : emptySection('No hay datos de brotes registrados.');
+    return sectionCard(DASHBOARD_MAP.flares.label, 'zap', body);
+  }
+
+  function renderUltrasound(rows) {
+    const any = rows.some(r =>
+      r.eco_nodulos !== '' ||
+      r.eco_abscesos !== '' ||
+      r.eco_fistulas !== '' ||
+      r.eco_ihs4 !== '' ||
+      r.eco_hallazgos !== ''
+    );
+    const body = any ? renderTable(rows, ULTRASOUND_COLUMNS) : emptySection('No hay datos de ecografia registrados.');
+    return sectionCard(DASHBOARD_MAP.ultrasound.label, 'scan', body);
+  }
+
+  function renderToxicHabits(rows) {
+    const any = rows.some(r => r.fumador_estado !== '' || r.alcohol_consume !== '');
+    const body = any ? renderTable(rows, TOXIC_HABITS_COLUMNS) : emptySection('No hay habitos toxicos registrados.');
+    return sectionCard(DASHBOARD_MAP.toxicHabits.label, 'cigarette', body);
+  }
+
   function renderSurgery(rows) {
     const any = rows.some(r => hasAnySurgery(r));
     const body = any ? renderTable(rows, SURGERY_COLUMNS) : emptySection('Este paciente no tiene cirugia registrada.');
@@ -239,6 +301,9 @@ export function createLongitudinalView() {
       selectedNusha ? renderTreatments(rows) : '',
       selectedNusha ? renderWeight(rows) : '',
       selectedNusha ? renderProms(rows) : '',
+      selectedNusha ? renderFlares(rows) : '',
+      selectedNusha ? renderUltrasound(rows) : '',
+      selectedNusha ? renderToxicHabits(rows) : '',
       selectedNusha ? renderSurgery(rows) : '',
       selectedNusha ? renderComorbidities(rows) : ''
     ].join('');

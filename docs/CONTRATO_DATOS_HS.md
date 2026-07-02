@@ -26,7 +26,8 @@ El hub informa explicitamente si falta alguna de estas hojas y descarta cualquie
 
 ### 2.2 Version de cabeceras
 
-- `HEADERS_HS_VERSION = 'v1'`.
+- `HEADERS_HS_VERSION = 'v2'`.
+- La version v2 es **append-only**: se anaden nuevas columnas monograficas al final del bloque v1 (despues de `hallazgos_interes`) y antes de cualquier futuro bloque `seguimiento_*`. El prefijo v1 se mantiene byte-identico salvo por la eliminacion de `eco_doppler`.
 - Cualquier cambio en el orden o nombre de columnas requiere actualizar `src/schema/hs_schema.js`, repetir la prueba de paridad y, si procede, incrementar la version.
 
 ## 3. Clave de paciente
@@ -93,10 +94,10 @@ La hoja de destino (`hoja_destino`) se deriva del campo `consulta`:
 ### 7.1 IHS-4 clinico y ecografico
 
 ```
-IHS-4 = nodulos * 1 + abscesos * 2 + fistulas_drenantes * 4
+IHS-4 = nodulos * 1 + abscesos * 2 + (fistulas + fistulas_drenantes) * 4
 ```
 
-> Nota: el conteo de fistulas drenantes no incluye `fd` en el calculo legacy; el hub sigue la misma formula.
+En la formula v2 `f` y `fd` tienen el mismo peso (4). Las historias con `fd > 0` pueden mostrar un IHS-4 superior al calculado con la formula legacy; esto es la correccion de integridad documentada.
 
 Gravedad:
 
@@ -118,7 +119,27 @@ Resultado redondeado a dos decimales.
 
 - **DLQI**: suma de 10 items (0-3). Interpretacion: Sin impacto, Impacto leve, Impacto moderado, Impacto alto, Impacto muy alto.
 - **HSQoL-24**: suma de 24 items (0-4), con algunos items invertidos. Interpretacion: Impacto bajo, Impacto leve, Impacto moderado, Impacto alto.
-- **EVA dolor**: escala 0-10.
+- **EVA dolor**, **EVA prurito**, **EVA olor**, **EVA supuracion**: escalas 0-10.
+
+### 7.4 Campos monograficos v2
+
+Columnas anadidas en `HEADERS_HS_VERSION = 'v2'` (append-only despues de `hallazgos_interes`):
+
+| Grupo | Campos |
+|---|---|
+| Comorbilidad | `comorb_acne_conglobata` |
+| Region IHS | `ihs_cuero_cabelludo_n`, `ihs_cuero_cabelludo_a`, `ihs_cuero_cabelludo_f`, `ihs_cuero_cabelludo_fd` |
+| Demografia | `edad_inicio`, `nivel_educativo` |
+| Habitos toxicos | `fumador_estado`, `exfumador_anios`, `alcohol_consume`, `alcohol_cervezas_vino_semana`, `alcohol_copas_destilados_semana`, `alcohol_ube_semana` |
+| Brotes | `flares_total_ultimo_anio` (primera visita), `flares_desde_ultima_visita` (seguimiento), `flares_requirio_urgencias`, `flares_requirio_cirugia`, `flares_requirio_antibioticos` |
+| PROMs | `eva_prurito`, `eva_olor`, `eva_supuracion` |
+| Ecografia | `eco_hallazgos` (texto libre); se elimina `eco_doppler` |
+
+Reglas derivadas:
+
+- `fumador` legacy se calcula como `Si` cuando `fumador_estado === 'Fumador'`, de lo contrario `No`.
+- `alcohol_ube_semana` = `alcohol_cervezas_vino_semana + 2 * alcohol_copas_destilados_semana`.
+- El campo `eco_doppler` se elimina del esquema v2; las filas historicas que lo contengan siguen siendo legibles pero no se emiten en nuevas filas.
 
 ## 8. Farmacoterapia
 
@@ -169,6 +190,9 @@ Reglas adicionales:
 - `fecha_visita`: `AAAA-MM-DD`.
 - `anio_inicio`, `anio_diagnostico`: 1900-2100.
 - `peso_kg`, `talla_m`: mayor o igual a 0.
+- `eva_dolor`, `eva_prurito`, `eva_olor`, `eva_supuracion`: enteros 0-10.
+- `flares_total_ultimo_anio`, `flares_desde_ultima_visita`: enteros mayores o iguales a 0.
+- `alcohol_cervezas_vino_semana`, `alcohol_copas_destilados_semana`, `alcohol_ube_semana`: mayores o iguales a 0.
 
 La exportacion se bloquea si falla alguna validacion y no se modifica el portapapeles.
 

@@ -70,7 +70,10 @@ Todas deben terminar con `PASS`.
    - Evolucion IHS-4
    - Tratamientos
    - Peso
-   - PROMs
+   - PROMs (incluye EVA dolor, prurito, olor y supuracion)
+   - Brotes
+   - Ecografia (incluye hallazgos textuales)
+   - Habitos toxicos
    - Cirugia
    - Comorbilidades
 5. Abrir `Cuadro de mando` y comprobar KPIs y filtros.
@@ -94,7 +97,7 @@ Se ha anadido `tests/parity-check-node.mjs` que compara fila a fila el TSV del h
 - Primera visita multidisciplinar.
 - Seguimiento monografico.
 
-El objetivo es que las celdas sean **identicas byte a byte**. La prueba se ejecuta con:
+El esquema actual es `HEADERS_HS_VERSION = 'v2'`. La prueba verifica que el **prefijo v1 (columnas no modificadas) sigue siendo identico byte a byte**. Las columnas v2 son nuevas y no se espera que el formulario legacy las genere; el test las documenta como divergencia esperada. La prueba se ejecuta con:
 
 ```powershell
 node tests/parity-check-node.mjs
@@ -102,7 +105,8 @@ node tests/parity-check-node.mjs
 
 ### Diferencias resueltas
 
-- Normalizacion de respuestas Si/No: el hub ahora exporta `Si`/`No` (capitalizado) para `antecedentes_familiares_hs`, `fumador` y `eco_doppler`, igual que el formulario legacy.
+- Normalizacion de respuestas Si/No: el hub exporta `Si`/`No` (capitalizado) para `antecedentes_familiares_hs` y `fumador`, igual que el formulario legacy.
+- El campo `eco_doppler` se elimina del esquema v2; las filas historicas que lo contengan siguen siendo legibles.
 
 ### Limitaciones conocidas
 

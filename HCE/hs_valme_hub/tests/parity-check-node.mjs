@@ -7,8 +7,24 @@
  * cell index and expected/actual values.
  */
 
-import { COLUMNS, SHEET_KEYS, IHS_REGIONS, IHS_LESION_TYPES } from '../src/schema/hs_schema.js';
+import { COLUMNS, SHEET_KEYS, IHS_REGIONS, IHS_LESION_TYPES, COMORBIDITY_FIELDS, HEADERS_HS_VERSION } from '../src/schema/hs_schema.js';
 import { buildTSV } from '../src/tsv/exporter.js';
+
+// V2 columns are hub-only: the legacy form mock does not emit them, so parity
+// asserts byte-identical output only for the unchanged v1 prefix.
+const V2_COMORBIDITIES = COMORBIDITY_FIELDS.filter(f => f.schemaVersion === 'v2').map(f => f.key);
+const V2_REGIONS = IHS_REGIONS.filter(r => r.schemaVersion === 'v2').map(r => r.key);
+const V2_IHS_COLUMNS = V2_REGIONS.flatMap(region =>
+  IHS_LESION_TYPES.map(type => `ihs_${region}_${type.key}`)
+);
+const OTHER_V2_COLUMNS = [
+  'edad_inicio', 'nivel_educativo', 'fumador_estado', 'exfumador_anios',
+  'alcohol_consume', 'alcohol_cervezas_vino_semana', 'alcohol_copas_destilados_semana', 'alcohol_ube_semana',
+  'flares_total_ultimo_anio', 'flares_desde_ultima_visita',
+  'flares_requirio_urgencias', 'flares_requirio_cirugia', 'flares_requirio_antibioticos',
+  'eva_prurito', 'eva_olor', 'eva_supuracion', 'eco_hallazgos'
+];
+const V2_COLUMN_SET = new Set([...V2_COMORBIDITIES, ...V2_IHS_COLUMNS, ...OTHER_V2_COLUMNS]);
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -68,7 +84,26 @@ function makeBasePayload() {
     seguimiento_motivo_cambio: '',
     seguimiento_efectos_adversos: 'No',
     otros_comentarios: 'Paciente estable',
-    hallazgos_interes: 'Ninguno'
+    hallazgos_interes: 'Ninguno',
+    // V2 monographic fields (hub-only; not emitted by the legacy form mock).
+    comorb_acne_conglobata: 'No',
+    edad_inicio: '18',
+    nivel_educativo: 'Secundarios',
+    fumador_estado: 'Nunca ha fumado',
+    exfumador_anios: '',
+    alcohol_consume: 'no',
+    alcohol_cervezas_vino_semana: '',
+    alcohol_copas_destilados_semana: '',
+    alcohol_ube_semana: '',
+    flares_total_ultimo_anio: '2',
+    flares_desde_ultima_visita: '1',
+    flares_requirio_urgencias: 'No',
+    flares_requirio_cirugia: 'No',
+    flares_requirio_antibioticos: 'No',
+    eva_prurito: '4',
+    eva_olor: '2',
+    eva_supuracion: '0',
+    eco_hallazgos: 'Sin hallazgos relevantes'
   };
 
   // Comorbidities: mostly No, one Si to prove case normalization.
@@ -106,7 +141,7 @@ function makeBasePayload() {
   payload.ihs_total_a = String(totals.a);
   payload.ihs_total_f = String(totals.f);
   payload.ihs_total_fd = String(totals.fd);
-  const score = totals.n + totals.a * 2 + totals.f * 4;
+  const score = totals.n + totals.a * 2 + (totals.f + totals.fd) * 4;
   payload.ihs4_total = String(score);
   payload.ihs4_gravedad = score < 4 ? 'Leve' : score <= 10 ? 'Moderado' : 'Grave';
 
@@ -245,13 +280,18 @@ function compareTSV(name, circuit, payload) {
     `${name}: Hub cell count ${hubCells.length} != schema column count ${columns.length}`);
   assert(legacyCells.length === columns.length,
     `${name}: Legacy cell count ${legacyCells.length} != schema column count ${columns.length}`);
+  assert(HEADERS_HS_VERSION === 'v2', `${name}: Expected HEADERS_HS_VERSION to be v2`);
 
+  // Compare only the unchanged v1 prefix byte-for-byte. V2 columns are expected
+  // to diverge because the legacy form mock does not emit them.
+  const unchangedColumns = columns.filter(c => !V2_COLUMN_SET.has(c));
   const mismatches = [];
-  for (let i = 0; i < columns.length; i += 1) {
+  for (const column of unchangedColumns) {
+    const i = columns.indexOf(column);
     if (hubCells[i] !== legacyCells[i]) {
       mismatches.push({
         index: i,
-        column: columns[i],
+        column,
         hub: hubCells[i],
         legacy: legacyCells[i]
       });
@@ -262,10 +302,11 @@ function compareTSV(name, circuit, payload) {
     const details = mismatches.map(m =>
       `  [${m.index}] ${m.column}: hub="${m.hub}" legacy="${m.legacy}"`
     ).join('\n');
-    throw new Error(`${name}: ${mismatches.length} cell(s) differ from legacy TSV:\n${details}`);
+    throw new Error(`${name}: ${mismatches.length} unchanged v1 cell(s) differ from legacy TSV:\n${details}`);
   }
 
-  console.log(`${name}: ${hubCells.length} cells OK (circuit ${circuit})`);
+  const v2Count = columns.length - unchangedColumns.length;
+  console.log(`${name}: ${unchangedColumns.length} v1-prefix cells OK; ${v2Count} v2 columns documented as hub-only (circuit ${circuit})`);
 }
 
 function run() {
@@ -273,7 +314,7 @@ function run() {
   compareTSV('First monografica', 'monografica', firstMonografica());
   compareTSV('First multidisciplinar', 'multidisciplinar', firstMultidisciplinar());
   compareTSV('Follow-up monografica', 'monografica', followUp());
-  console.log('PASS: Hub TSV is byte-identical to legacy TSV for representative visits.');
+  console.log('PASS: Hub TSV v1 prefix is byte-identical to legacy TSV; v2 columns diverge as expected.');
 }
 
 try {

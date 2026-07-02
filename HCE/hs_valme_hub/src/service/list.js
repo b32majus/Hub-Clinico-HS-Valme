@@ -1,7 +1,7 @@
 import { formatDate, dateSortValue } from '../common/utils.js';
 import { formatTreatmentSummary } from '../common/therapy.js';
 
-const SUMMARY_COLUMNS = [
+const BASE_SUMMARY_COLUMNS = [
   { key: 'nusha', label: 'NUSHA' },
   { key: 'fecha_visita', label: 'Fecha', format: formatDate },
   { key: 'tipo_visita', label: 'Tipo visita' },
@@ -14,20 +14,29 @@ const SUMMARY_COLUMNS = [
   { key: 'tratamiento', label: 'Tratamiento', compute: formatTreatmentSummary }
 ];
 
-export function buildSummaryRows(rows, { limit = 80 } = {}) {
+const V2_SUMMARY_COLUMNS = [
+  { key: 'flares_total_ultimo_anio', label: 'Brotes ultimo año' },
+  { key: 'flares_desde_ultima_visita', label: 'Brotes desde ultima' },
+  { key: 'eva_prurito', label: 'EVA prurito' },
+  { key: 'eva_olor', label: 'EVA olor' },
+  { key: 'eva_supuracion', label: 'EVA supuracion' }
+];
+
+export function getSummaryColumns({ includeV2Columns = false } = {}) {
+  return includeV2Columns ? [...BASE_SUMMARY_COLUMNS, ...V2_SUMMARY_COLUMNS] : BASE_SUMMARY_COLUMNS;
+}
+
+export function buildSummaryRows(rows, { limit = 80, includeV2Columns = false } = {}) {
+  const columns = getSummaryColumns({ includeV2Columns });
   const sorted = [...rows].sort((a, b) => dateSortValue(b) - dateSortValue(a));
   return sorted.slice(0, limit).map(row => {
     const out = {};
-    for (const col of SUMMARY_COLUMNS) {
+    for (const col of columns) {
       if (col.compute) out[col.key] = col.compute(row);
       else out[col.key] = col.format ? col.format(row[col.key]) : (row[col.key] ?? '');
     }
     return out;
   });
-}
-
-export function getSummaryColumns() {
-  return SUMMARY_COLUMNS;
 }
 
 function csvEscape(value) {
@@ -38,22 +47,24 @@ function csvEscape(value) {
   return text;
 }
 
-export function toCsv(rows) {
+export function toCsv(rows, { includeV2Columns = false } = {}) {
   if (!rows.length) return '';
-  const headers = SUMMARY_COLUMNS.map(c => c.label);
+  const columns = getSummaryColumns({ includeV2Columns });
+  const headers = columns.map(c => c.label);
   const lines = [headers.join(',')];
   for (const row of rows) {
-    lines.push(SUMMARY_COLUMNS.map(c => csvEscape(row[c.key])).join(','));
+    lines.push(columns.map(c => csvEscape(row[c.key])).join(','));
   }
   return lines.join('\n');
 }
 
-export function toTsvSummary(rows) {
+export function toTsvSummary(rows, { includeV2Columns = false } = {}) {
   if (!rows.length) return '';
-  const headers = SUMMARY_COLUMNS.map(c => c.label);
+  const columns = getSummaryColumns({ includeV2Columns });
+  const headers = columns.map(c => c.label);
   const lines = [headers.join('\t')];
   for (const row of rows) {
-    lines.push(SUMMARY_COLUMNS.map(c => String(row[c.key] ?? '').replace(/\t/g, ' ')).join('\t'));
+    lines.push(columns.map(c => String(row[c.key] ?? '').replace(/\t/g, ' ')).join('\t'));
   }
   return lines.join('\n');
 }

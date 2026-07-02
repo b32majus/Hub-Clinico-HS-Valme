@@ -16,7 +16,7 @@ import {
 } from '../src/service/kpis.js';
 import { applyFilters, buildFilterOptions } from '../src/service/filters.js';
 import { buildSummaryRows } from '../src/service/list.js';
-import { DERIVED } from '../src/schema/hs_schema.js';
+import { DERIVED, IHS_REGIONS, IHS_LESION_TYPES } from '../src/schema/hs_schema.js';
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -75,7 +75,8 @@ function run() {
         ihs4_gravedad: 'Moderado',
         peso_kg: '70',
         cirugia_dermatologia: 'Si',
-        cirugia_aplica: 'Si'
+        cirugia_aplica: 'Si',
+        comorb_acne_conglobata: 'Si'
       }),
       makeRow({
         nusha: 'AN1234567890',
@@ -142,8 +143,9 @@ function run() {
   const rowsMissing = getPatientRows(base, 'AN0000000000');
   assert(rowsMissing.length === 0, 'Expected 0 rows for unknown NUSHA');
 
-  // Derived IHS-4 consistency
-  assert(DERIVED.ihs4Score({ n: 2, a: 1, f: 1 }) === 8, 'IHS-4 score derivation mismatch');
+  // Derived IHS-4 consistency (v2 includes draining fistulas)
+  assert(DERIVED.ihs4Score({ n: 1, a: 1, f: 1, fd: 1 }) === 11, 'IHS-4 v2 score derivation mismatch');
+  assert(DERIVED.ihs4Score({ n: 2, a: 1, f: 1, fd: 0 }) === 8, 'IHS-4 score without fd mismatch');
   assert(DERIVED.ihs4Grade(3) === 'Leve', 'IHS-4 grade leve mismatch');
   assert(DERIVED.ihs4Grade(6) === 'Moderado', 'IHS-4 grade moderado mismatch');
   assert(DERIVED.ihs4Grade(11) === 'Grave', 'IHS-4 grade grave mismatch');
@@ -174,8 +176,21 @@ function run() {
   const comorb = topComorbidities(all);
   const diabetes = comorb.find(c => c.label === 'Diabetes tipo II');
   const hta = comorb.find(c => c.label === 'HTA');
+  const acneConglobata = comorb.find(c => c.label === 'Acne conglobata');
   assert(diabetes && diabetes.count === 1, 'Expected 1 diabetes comorbidity');
   assert(hta && hta.count === 1, 'Expected 1 HTA comorbidity');
+  assert(acneConglobata && acneConglobata.count === 1, 'Expected 1 acne conglobata comorbidity');
+
+  // V2 IHS region (cuero_cabelludo) is part of the regional schema.
+  assert(IHS_REGIONS.some(r => r.key === 'cuero_cabelludo'), 'Expected cuero_cabelludo in IHS_REGIONS');
+  const scalpRow = makeRow({
+    ihs_cuero_cabelludo_n: '2',
+    ihs_cuero_cabelludo_a: '1',
+    ihs_cuero_cabelludo_f: '0',
+    ihs_cuero_cabelludo_fd: '1'
+  });
+  const totalN = IHS_REGIONS.reduce((sum, region) => sum + (parseFloat(scalpRow[`ihs_${region.key}_n`]) || 0), 0);
+  assert(totalN === 2, 'Expected cuero_cabelludo to contribute to IHS regional totals');
 
   // Filters
   const graveOnly = applyFilters(all, { gravedad: 'grave' });
@@ -191,6 +206,11 @@ function run() {
   const summary = buildSummaryRows(all);
   assert(summary.length === 3, `Expected 3 summary rows, got ${summary.length}`);
   assert(summary.every(s => s.nusha && s.fecha_visita), 'Summary rows should have NUSHA and fecha');
+  assert(!('eva_prurito' in summary[0]), 'Default summary should not include v2 columns');
+
+  const v2Summary = buildSummaryRows(all, { includeV2Columns: true });
+  assert(v2Summary.length === 3, `Expected 3 v2 summary rows, got ${v2Summary.length}`);
+  assert('eva_prurito' in v2Summary[0] && 'flares_total_ultimo_anio' in v2Summary[0], 'V2 summary should include new columns');
 
   // Privacy: ensure no browser storage keys are referenced in our modules
   const forbidden = ['localStorage', 'sessionStorage', 'IndexedDB', 'indexedDB'];
