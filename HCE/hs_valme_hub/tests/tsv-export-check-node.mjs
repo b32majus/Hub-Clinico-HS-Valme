@@ -7,6 +7,7 @@
 
 import { COLUMNS, SHEET_KEYS, IHS_REGIONS, IHS_LESION_TYPES, HEADERS_HS_VERSION } from '../src/schema/hs_schema.js';
 import { buildTSV, validatePayload, getDestinationSheet } from '../src/tsv/exporter.js';
+import { renderFlaresSection } from '../src/form/shared_fields.js';
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -29,7 +30,6 @@ function makeValidPayload() {
     eco_nodulos: '1',
     eco_abscesos: '0',
     eco_fistulas: '0',
-    eco_doppler: 'no',
     eva_dolor: '3'
   };
   // DLQI and HSQoL answers
@@ -126,6 +126,13 @@ function run() {
   const ubeCells = ubeTsv.split('\t');
   const ubeIndex = COLUMNS.monografica.indexOf('alcohol_ube_semana');
   assert(ubeIndex > -1 && ubeCells[ubeIndex] === '7', `Expected UBE cell to be 7, got ${ubeCells[ubeIndex]}`);
+
+  const firstVisitFlares = renderFlaresSection('primera');
+  assert(firstVisitFlares.includes('flares_total_ultimo_anio'), 'First visit flare section should render flares_total_ultimo_anio');
+  assert(!firstVisitFlares.includes('flares_desde_ultima_visita'), 'First visit flare section must not render follow-up flare count');
+
+  const followUpFlares = renderFlaresSection('seguimiento');
+  assert(followUpFlares.includes('flares_desde_ultima_visita'), 'Follow-up flare section should render flares_desde_ultima_visita');
 
   console.log('PASS: TSV export and validation behave as expected for v2 schema.');
 }

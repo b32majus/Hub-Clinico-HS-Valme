@@ -176,7 +176,8 @@ export function renderDemographicsExtras() {
 }
 
 export function renderFlaresSection(mode) {
-  const flareCountField = mode === 'first'
+  const isFirstVisit = mode === 'primera' || mode === 'first';
+  const flareCountField = isFirstVisit
     ? formGroup('Brotes en el ultimo año', `<input type="number" class="form-input" data-field="flares_total_ultimo_anio" min="0">`)
     : formGroup('Brotes desde la ultima visita', `<input type="number" class="form-input" data-field="flares_desde_ultima_visita" min="0">`);
   return `
