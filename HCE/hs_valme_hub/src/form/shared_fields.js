@@ -31,6 +31,28 @@ const SI_NO_OPTIONS = [
   { value: 'no', label: 'No' }
 ];
 
+const FUMADOR_ESTADO_OPTIONS = [
+  { value: '', label: 'Seleccione una opcion' },
+  { value: 'Fumador', label: 'Fumador' },
+  { value: 'Exfumador', label: 'Exfumador' },
+  { value: 'Nunca ha fumado', label: 'Nunca ha fumado' }
+];
+
+const ALCOHOL_CONSUME_OPTIONS = [
+  { value: '', label: 'Seleccione una opcion' },
+  { value: 'si', label: 'Si' },
+  { value: 'no', label: 'No' },
+  { value: 'nunca', label: 'Nunca' }
+];
+
+const EDUCATION_OPTIONS = [
+  { value: '', label: 'Seleccione una opcion' },
+  { value: 'Sin estudios', label: 'Sin estudios' },
+  { value: 'Primarios', label: 'Primarios' },
+  { value: 'Secundarios', label: 'Secundarios' },
+  { value: 'Universitarios', label: 'Universitarios' }
+];
+
 const SEX_OPTIONS = [
   { value: '', label: 'Seleccione una opcion' },
   { value: 'masculino', label: 'Masculino' },
@@ -108,14 +130,64 @@ export function renderAnamnesisSection() {
         <div class="form-grid">
           ${formGroup('Antecedentes familiares HS', `<select class="form-select" data-field="antecedentes_familiares_hs">${selectOptions(SI_NO_OPTIONS)}</select>`)}
           ${formGroup('Año inicio', `<input type="number" class="form-input" data-field="anio_inicio" min="1900" max="2100">`)}
-          ${formGroup('Fumador', `<select class="form-select" data-field="fumador" data-toggle-show="smoking">${selectOptions(SI_NO_OPTIONS)}</select>`)}
+          ${formGroup('Fumador estado', `<select class="form-select" data-field="fumador_estado" data-toggle-show="smoking">${selectOptions(FUMADOR_ESTADO_OPTIONS)}</select>`)}
+          ${formGroup('Exfumador años', `<input type="number" class="form-input" data-field="exfumador_anios" min="0" max="100" data-show-when="smoking" data-show-value="Exfumador">`, 'Visible si Exfumador')}
           ${formGroup('Sexo al nacimiento', `<select class="form-select" data-field="sexo_nacimiento">${selectOptions(SEX_OPTIONS)}</select>`)}
-          ${formGroup('Cigarros/dia', `<input type="number" class="form-input" data-field="cigarros_dia" min="0" max="50" data-show-when="smoking" data-show-value="si">`, 'Visible si fumador = Si')}
-          ${formGroup('Años fumador', `<input type="number" class="form-input" data-field="anios_fumador" min="0" max="100" data-show-when="smoking" data-show-value="si">`, 'Visible si fumador = Si')}
+          ${formGroup('Cigarros/dia', `<input type="number" class="form-input" data-field="cigarros_dia" min="0" max="50">`)}
+          ${formGroup('Años fumador', `<input type="number" class="form-input" data-field="anios_fumador" min="0" max="100">`)}
           ${formGroup('Año diagnostico', `<input type="number" class="form-input" data-field="anio_diagnostico" min="1900" max="2100">`)}
           ${formGroup('Peso (Kg)', `<input type="number" class="form-input" data-field="peso_kg" min="0" step="0.1" data-calc-imc>`)}
           ${formGroup('Talla (m)', `<input type="number" class="form-input" data-field="talla_m" min="0" step="0.01" data-calc-imc>`)}
           ${formGroup('IMC', `<input type="text" class="form-input readonly-field" data-field="imc" readonly>`)}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+export function renderToxicHabitsSection() {
+  return `
+    <div class="form-section">
+      <div class="form-section__header">HABITOS TOXICOS</div>
+      <div class="form-section__body open">
+        <div class="form-grid">
+          ${formGroup('Alcohol consume', `<select class="form-select" data-field="alcohol_consume" data-toggle-show="alcohol">${selectOptions(ALCOHOL_CONSUME_OPTIONS)}</select>`)}
+          ${formGroup('Cervezas/vino por semana', `<input type="number" class="form-input" data-field="alcohol_cervezas_vino_semana" min="0" data-show-when="alcohol" data-show-value="si" data-calc-ube>`, 'Visible si consume alcohol')}
+          ${formGroup('Copas destilados por semana', `<input type="number" class="form-input" data-field="alcohol_copas_destilados_semana" min="0" data-show-when="alcohol" data-show-value="si" data-calc-ube>`, 'Visible si consume alcohol')}
+          ${formGroup('UBE semana', `<input type="number" class="form-input readonly-field" data-field="alcohol_ube_semana" readonly>`, 'Unidades de bebida estandar: cervezas/vino + 2 x copas')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+export function renderDemographicsExtras() {
+  return `
+    <div class="form-section">
+      <div class="form-section__header">DATOS DEMOGRAFICOS ADICIONALES</div>
+      <div class="form-section__body open">
+        <div class="form-grid">
+          ${formGroup('Edad inicio (años)', `<input type="number" class="form-input" data-field="edad_inicio" min="0" max="120">`)}
+          ${formGroup('Nivel educativo', `<select class="form-select" data-field="nivel_educativo">${selectOptions(EDUCATION_OPTIONS)}</select>`)}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+export function renderFlaresSection(mode) {
+  const flareCountField = mode === 'first'
+    ? formGroup('Brotes en el ultimo año', `<input type="number" class="form-input" data-field="flares_total_ultimo_anio" min="0">`)
+    : formGroup('Brotes desde la ultima visita', `<input type="number" class="form-input" data-field="flares_desde_ultima_visita" min="0">`);
+  return `
+    <div class="form-section">
+      <div class="form-section__header">BROTES</div>
+      <div class="form-section__body open">
+        <div class="form-grid">
+          ${flareCountField}
+          ${formGroup('Requirio urgencias', `<select class="form-select" data-field="flares_requirio_urgencias">${selectOptions(SI_NO_OPTIONS)}</select>`)}
+          ${formGroup('Requirio cirugia', `<select class="form-select" data-field="flares_requirio_cirugia">${selectOptions(SI_NO_OPTIONS)}</select>`)}
+          ${formGroup('Requirio antibioticos', `<select class="form-select" data-field="flares_requirio_antibioticos">${selectOptions(SI_NO_OPTIONS)}</select>`)}
         </div>
       </div>
     </div>
@@ -193,7 +265,7 @@ export function renderEcoSection() {
           ${formGroup('Nodulos (calculo IHS4 Ecografico)', `<input type="number" class="form-input" data-field="eco_nodulos" min="0" data-calc-eco>`)}
           ${formGroup('Abscesos (calculo IHS4 Ecografico)', `<input type="number" class="form-input" data-field="eco_abscesos" min="0" data-calc-eco>`)}
           ${formGroup('Fistulas (calculo IHS4 Ecografico)', `<input type="number" class="form-input" data-field="eco_fistulas" min="0" data-calc-eco>`)}
-          ${formGroup('Doppler +', `<select class="form-select" data-field="eco_doppler">${selectOptions(SI_NO_OPTIONS)}</select>`)}
+          ${formGroup('Hallazgos ecograficos', `<textarea class="form-textarea" data-field="eco_hallazgos" rows="3" placeholder="Describa los hallazgos ecograficos relevantes"></textarea>`)}
         </div>
         <div class="prom-summary" style="margin-top:var(--space-4);">
           <div class="prom-summary__card">
@@ -253,8 +325,28 @@ export function renderPromsSection() {
             <div class="prom-summary__value" data-eva-total>0</div>
             <div class="prom-summary__hint">Escala 0-10</div>
           </div>
+          <div class="prom-summary__card">
+            <div class="prom-summary__title">EVA prurito</div>
+            <div class="prom-summary__value" data-eva-prurito-total>0</div>
+            <div class="prom-summary__hint">Escala 0-10</div>
+          </div>
+          <div class="prom-summary__card">
+            <div class="prom-summary__title">EVA olor</div>
+            <div class="prom-summary__value" data-eva-olor-total>0</div>
+            <div class="prom-summary__hint">Escala 0-10</div>
+          </div>
+          <div class="prom-summary__card">
+            <div class="prom-summary__title">EVA supuracion</div>
+            <div class="prom-summary__value" data-eva-supuracion-total>0</div>
+            <div class="prom-summary__hint">Escala 0-10</div>
+          </div>
         </div>
-        ${formGroup('EVA Dolor', `<input type="number" class="form-input" data-field="eva_dolor" min="0" max="10" data-calc-eva>`, 'Escala 0-10')}
+        <div class="form-grid form-grid--2" style="margin-bottom:var(--space-4);">
+          ${formGroup('EVA Dolor', `<input type="number" class="form-input" data-field="eva_dolor" min="0" max="10" data-calc-eva>`, 'Escala 0-10')}
+          ${formGroup('EVA Prurito', `<input type="number" class="form-input" data-field="eva_prurito" min="0" max="10" data-calc-eva>`, 'Escala 0-10')}
+          ${formGroup('EVA Olor', `<input type="number" class="form-input" data-field="eva_olor" min="0" max="10" data-calc-eva>`, 'Escala 0-10')}
+          ${formGroup('EVA Supuracion', `<input type="number" class="form-input" data-field="eva_supuracion" min="0" max="10" data-calc-eva>`, 'Escala 0-10')}
+        </div>
         <details class="form-section" style="margin-top:var(--space-5);">
           <summary style="cursor:pointer;font-weight:var(--font-bold);color:var(--color-primary-800);">DLQI (10 items)</summary>
           <table class="prom-table">
@@ -480,8 +572,24 @@ export function bindFormInteractions(container) {
   const updateIhs = () => {
     const totals = { n: 0, a: 0, f: 0, fd: 0 };
     for (const region of IHS_REGIONS) {
+      const regionTotals = { n: 0, a: 0, f: 0, fd: 0 };
       for (const type of IHS_LESION_TYPES) {
-        totals[type.key] += parseInt(container.querySelector(`[data-field="ihs_${region.key}_${type.key}"]`)?.value || 0, 10);
+        const val = parseInt(container.querySelector(`[data-field="ihs_${region.key}_${type.key}"]`)?.value || 0, 10);
+        totals[type.key] += val;
+        regionTotals[type.key] += val;
+      }
+      const regionEl = container.querySelector(`[data-field="ihs_${region.key}_n"]`)?.closest('.ihs-region');
+      if (regionEl) {
+        const hasWarning = regionTotals.f > 0 && regionTotals.fd > 0;
+        let warningEl = regionEl.querySelector('.ihs-warning');
+        if (hasWarning && !warningEl) {
+          warningEl = document.createElement('div');
+          warningEl.className = 'ihs-warning';
+          warningEl.textContent = 'Confirma si fistulas y fistulas drenantes son lesiones distintas.';
+          regionEl.appendChild(warningEl);
+        } else if (!hasWarning && warningEl) {
+          warningEl.remove();
+        }
       }
     }
     for (const key of Object.keys(totals)) {
@@ -516,6 +624,15 @@ export function bindFormInteractions(container) {
   };
   container.querySelectorAll('[data-calc-eco]').forEach(el => el.addEventListener('input', updateEco));
 
+  // UBE calculation
+  const updateUbe = () => {
+    const cervezas = parseFloat(container.querySelector('[data-field="alcohol_cervezas_vino_semana"]')?.value || 0);
+    const copas = parseFloat(container.querySelector('[data-field="alcohol_copas_destilados_semana"]')?.value || 0);
+    const ubeInput = container.querySelector('[data-field="alcohol_ube_semana"]');
+    if (ubeInput) ubeInput.value = cervezas + 2 * copas;
+  };
+  container.querySelectorAll('[data-calc-ube]').forEach(el => el.addEventListener('input', updateUbe));
+
   // PROMs totals
   const updateProms = () => {
     let dlqiTotal = 0;
@@ -546,9 +663,15 @@ export function bindFormInteractions(container) {
     const hsqolInterpEl = container.querySelector('[data-hsqol-interpretation]');
     if (hsqolInterpEl) hsqolInterpEl.textContent = hsqolInterp;
 
-    const eva = container.querySelector('[data-field="eva_dolor"]')?.value || '0';
-    const evaEl = container.querySelector('[data-eva-total]');
-    if (evaEl) evaEl.textContent = eva;
+    const updateEvaCard = (field, selector) => {
+      const value = container.querySelector(`[data-field="${field}"]`)?.value || '0';
+      const el = container.querySelector(selector);
+      if (el) el.textContent = value;
+    };
+    updateEvaCard('eva_dolor', '[data-eva-total]');
+    updateEvaCard('eva_prurito', '[data-eva-prurito-total]');
+    updateEvaCard('eva_olor', '[data-eva-olor-total]');
+    updateEvaCard('eva_supuracion', '[data-eva-supuracion-total]');
 
     // Morisky
     const expected = ['no', 'si', 'no', 'no'];
@@ -563,7 +686,7 @@ export function bindFormInteractions(container) {
   };
   container.querySelectorAll('[data-field]').forEach(el => {
     const field = el.getAttribute('data-field');
-    if (/^dlqi_q|^hsqol_q|^seguimiento_morisky_q/.test(field) || field === 'eva_dolor') {
+    if (/^dlqi_q|^hsqol_q|^seguimiento_morisky_q/.test(field) || /^eva_/.test(field)) {
       el.addEventListener('change', updateProms);
       el.addEventListener('input', updateProms);
     }
@@ -641,7 +764,9 @@ export function collectFormData(container, opts = {}) {
   const siNoSelectFields = new Set([
     'antecedentes_familiares_hs',
     'fumador',
-    'eco_doppler'
+    'flares_requirio_urgencias',
+    'flares_requirio_cirugia',
+    'flares_requirio_antibioticos'
   ]);
   container.querySelectorAll('[data-field]').forEach(el => {
     const key = el.getAttribute('data-field');
@@ -686,6 +811,14 @@ export function collectFormData(container, opts = {}) {
   payload.eco_gravedad = DERIVED.ihs4Grade(payload.eco_ihs4);
 
   payload.imc = DERIVED.imc({ pesoKg: payload.peso_kg, tallaM: payload.talla_m });
+
+  // Backward-compatible tobacco column
+  payload.fumador = payload.fumador_estado === 'Fumador' ? 'Si' : 'No';
+
+  // Derived alcohol UBE
+  const cervezas = parseFloat(payload.alcohol_cervezas_vino_semana || 0);
+  const copas = parseFloat(payload.alcohol_copas_destilados_semana || 0);
+  payload.alcohol_ube_semana = cervezas + 2 * copas;
 
   let dlqiTotal = 0;
   let dlqiAnswered = 0;
@@ -825,7 +958,10 @@ export function prefillFromBase(nusha, container, base, mode) {
 
   set('antecedentes_familiares_hs', row.antecedentes_familiares_hs);
   set('anio_inicio', row.anio_inicio);
-  set('fumador', row.fumador);
+  set('edad_inicio', row.edad_inicio);
+  set('nivel_educativo', row.nivel_educativo);
+  set('fumador_estado', row.fumador_estado);
+  set('exfumador_anios', row.exfumador_anios);
   set('cigarros_dia', row.cigarros_dia);
   set('anios_fumador', row.anios_fumador);
   set('sexo_nacimiento', row.sexo_nacimiento);
@@ -833,6 +969,19 @@ export function prefillFromBase(nusha, container, base, mode) {
   set('peso_kg', row.peso_kg);
   set('talla_m', row.talla_m);
   set('imc', row.imc);
+  set('alcohol_consume', row.alcohol_consume);
+  set('alcohol_cervezas_vino_semana', row.alcohol_cervezas_vino_semana);
+  set('alcohol_copas_destilados_semana', row.alcohol_copas_destilados_semana);
+  set('alcohol_ube_semana', row.alcohol_ube_semana);
+  set('flares_total_ultimo_anio', row.flares_total_ultimo_anio);
+  set('flares_desde_ultima_visita', row.flares_desde_ultima_visita);
+  set('flares_requirio_urgencias', row.flares_requirio_urgencias);
+  set('flares_requirio_cirugia', row.flares_requirio_cirugia);
+  set('flares_requirio_antibioticos', row.flares_requirio_antibioticos);
+  set('eva_prurito', row.eva_prurito);
+  set('eva_olor', row.eva_olor);
+  set('eva_supuracion', row.eva_supuracion);
+  set('eco_hallazgos', row.eco_hallazgos);
 
   for (const f of COMORBIDITY_FIELDS) {
     const item = container.querySelector(`[data-comorb-key="${f.key}"]`);

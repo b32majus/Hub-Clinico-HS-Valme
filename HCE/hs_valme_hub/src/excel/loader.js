@@ -28,6 +28,14 @@ function normalizeRow(row) {
   return out;
 }
 
+function normalizeRowKeys(row = {}) {
+  const keys = new Set();
+  for (const key of Object.keys(row)) {
+    keys.add(String(key).trim().toLowerCase().replace(/\s+/g, '_'));
+  }
+  return keys;
+}
+
 function readSheet(workbook, sheetName) {
   const XLSX = getXLSX();
   const sheet = workbook.Sheets[sheetName];
@@ -49,6 +57,14 @@ export async function loadBase(file) {
   const missingSheets = validateSheets(workbook);
   if (missingSheets.length) {
     throw new Error(`Faltan hojas obligatorias: ${missingSheets.join(', ')}.`);
+  }
+
+  const firstRawRow =
+    XLSX.utils.sheet_to_json(workbook.Sheets[SHEET_KEYS.monografica], { defval: '' })[0]
+    || XLSX.utils.sheet_to_json(workbook.Sheets[SHEET_KEYS.multidisciplinar], { defval: '' })[0];
+  const firstRawKeys = normalizeRowKeys(firstRawRow);
+  if (firstRawRow && (!firstRawKeys.has('comorb_acne_conglobata') || !firstRawKeys.has('eva_prurito'))) {
+    console.warn('Workbook loaded with v1 schema; v2 columns will be backfilled as empty.');
   }
 
   const monografica = readSheet(workbook, SHEET_KEYS.monografica);

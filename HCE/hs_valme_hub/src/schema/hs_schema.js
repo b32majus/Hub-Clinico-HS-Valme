@@ -5,7 +5,7 @@
  * HEADERS_HS_VERSION must remain in sync with the canonical workbook schema.
  */
 
-export const HEADERS_HS_VERSION = 'v1';
+export const HEADERS_HS_VERSION = 'v2';
 
 export const SHEET_KEYS = {
   monografica: 'Monografica',
@@ -28,8 +28,12 @@ export const IHS_REGIONS = [
   { key: 'intermamaria', label: 'Intermamaria' },
   { key: 'genital', label: 'Genital' },
   { key: 'perianal', label: 'Perianal' },
-  { key: 'otras', label: 'Otras' }
+  { key: 'otras', label: 'Otras' },
+  { key: 'cuero_cabelludo', label: 'Cuero cabelludo', schemaVersion: 'v2' }
 ];
+
+const V1_IHS_REGIONS = IHS_REGIONS.filter(region => region.schemaVersion !== 'v2');
+const V2_IHS_REGIONS = IHS_REGIONS.filter(region => region.schemaVersion === 'v2');
 
 export const IHS_LESION_TYPES = [
   { key: 'n', shortLabel: 'N', className: 'nodulo' },
@@ -135,8 +139,12 @@ export const COMORBIDITY_FIELDS = [
   { key: 'comorb_ansiedad', label: 'Ansiedad' },
   { key: 'comorb_pash_papash', label: 'PASH/PAPASH' },
   { key: 'comorb_pioderma_gangrenoso', label: 'Pioderma gangrenoso' },
-  { key: 'comorb_foliculitis_decalvante', label: 'Foliculitis decalvante' }
+  { key: 'comorb_foliculitis_decalvante', label: 'Foliculitis decalvante' },
+  { key: 'comorb_acne_conglobata', label: 'Acne conglobata', schemaVersion: 'v2' }
 ];
+
+const V1_COMORBIDITY_FIELDS = COMORBIDITY_FIELDS.filter(field => field.schemaVersion !== 'v2');
+const V2_COMORBIDITY_FIELDS = COMORBIDITY_FIELDS.filter(field => field.schemaVersion === 'v2');
 
 export function buildTherapyFieldNames(prefix) {
   const fields = [];
@@ -173,10 +181,10 @@ export function buildHeadersHS() {
     'imc'
   ];
 
-  headers.push(...COMORBIDITY_FIELDS.map(f => f.key));
+  headers.push(...V1_COMORBIDITY_FIELDS.map(f => f.key));
   headers.push('otras_comorbilidades');
 
-  for (const region of IHS_REGIONS) {
+  for (const region of V1_IHS_REGIONS) {
     headers.push(`ihs_${region.key}_n`);
     headers.push(`ihs_${region.key}_a`);
     headers.push(`ihs_${region.key}_f`);
@@ -229,7 +237,31 @@ export function buildHeadersHS() {
     'seguimiento_motivo_cambio',
     'seguimiento_efectos_adversos',
     'otros_comentarios',
-    'hallazgos_interes'
+    'hallazgos_interes',
+    ...V2_COMORBIDITY_FIELDS.map(f => f.key),
+    ...V2_IHS_REGIONS.flatMap(region => [
+      `ihs_${region.key}_n`,
+      `ihs_${region.key}_a`,
+      `ihs_${region.key}_f`,
+      `ihs_${region.key}_fd`
+    ]),
+    'edad_inicio',
+    'nivel_educativo',
+    'fumador_estado',
+    'exfumador_anios',
+    'alcohol_consume',
+    'alcohol_cervezas_vino_semana',
+    'alcohol_copas_destilados_semana',
+    'alcohol_ube_semana',
+    'flares_total_ultimo_anio',
+    'flares_desde_ultima_visita',
+    'flares_requirio_urgencias',
+    'flares_requirio_cirugia',
+    'flares_requirio_antibioticos',
+    'eva_prurito',
+    'eva_olor',
+    'eva_supuracion',
+    'eco_hallazgos'
   );
 
   return headers;
@@ -261,8 +293,8 @@ export const VALIDATORS = {
 };
 
 export const DERIVED = {
-  ihs4Score({ n = 0, a = 0, f = 0 }) {
-    return n + a * 2 + f * 4;
+  ihs4Score({ n = 0, a = 0, f = 0, fd = 0 }) {
+    return n + a * 2 + (f + fd) * 4;
   },
   ihs4Grade(score) {
     if (score < 4) return 'Leve';
@@ -298,7 +330,19 @@ export const DASHBOARD_MAP = {
   },
   proms: {
     label: 'PROMs',
-    columns: ['fecha_visita', 'dlqi_total', 'dlqi_interpretacion', 'hsqol_total', 'hsqol_interpretacion', 'eva_dolor']
+    columns: ['fecha_visita', 'dlqi_total', 'dlqi_interpretacion', 'hsqol_total', 'hsqol_interpretacion', 'eva_dolor', 'eva_prurito', 'eva_olor', 'eva_supuracion']
+  },
+  flares: {
+    label: 'Brotes',
+    columns: ['fecha_visita', 'flares_total_ultimo_anio', 'flares_desde_ultima_visita', 'flares_requirio_urgencias', 'flares_requirio_cirugia', 'flares_requirio_antibioticos']
+  },
+  ultrasound: {
+    label: 'Ecografia',
+    columns: ['fecha_visita', 'eco_nodulos', 'eco_abscesos', 'eco_fistulas', 'eco_ihs4', 'eco_gravedad', 'eco_hallazgos']
+  },
+  toxicHabits: {
+    label: 'Habitos toxicos',
+    columns: ['fecha_visita', 'fumador_estado', 'exfumador_anios', 'alcohol_consume', 'alcohol_cervezas_vino_semana', 'alcohol_copas_destilados_semana', 'alcohol_ube_semana']
   },
   surgery: {
     label: 'Cirugia',

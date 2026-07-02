@@ -3,6 +3,9 @@ import {
   ICON,
   renderTopFields,
   renderAnamnesisSection,
+  renderToxicHabitsSection,
+  renderDemographicsExtras,
+  renderFlaresSection,
   renderComorbiditySection,
   renderIhsSection,
   renderEcoSection,
@@ -52,6 +55,9 @@ export function createVisitForm({ mode, title, therapyPrefix }) {
           ${renderPatientSelector(store.getBase())}
           ${renderTopFields()}
           ${renderAnamnesisSection()}
+          ${renderToxicHabitsSection()}
+          ${renderDemographicsExtras()}
+          ${renderFlaresSection(mode)}
           ${renderComorbiditySection()}
           ${renderIhsSection()}
           ${renderEcoSection()}
@@ -134,7 +140,7 @@ export function createVisitForm({ mode, title, therapyPrefix }) {
       const sheet = getDestinationSheet(circuit);
       try {
         await copyToClipboard(tsv);
-        showAlert(container, `Fila copiada al portapapeles. Pegue en Excel &gt; hoja <strong>${sheet}</strong> (esquema v1).`, 'success');
+        showAlert(container, `Fila copiada al portapapeles. Pegue en Excel &gt; hoja <strong>${sheet}</strong> (esquema v2).`, 'success');
       } catch (err) {
         showAlert(container, `No se pudo copiar: ${err.message}`, 'error');
       }

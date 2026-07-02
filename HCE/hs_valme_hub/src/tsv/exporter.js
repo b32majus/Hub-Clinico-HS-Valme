@@ -1,5 +1,16 @@
 import { COLUMNS, REQUIRED, VALIDATORS, SHEET_KEYS } from '../schema/hs_schema.js';
 
+const RANGE_VALIDATORS = {
+  eva_prurito: { min: 0, max: 10, integer: true, message: 'EVA prurito debe ser un entero entre 0 y 10.' },
+  eva_olor: { min: 0, max: 10, integer: true, message: 'EVA olor debe ser un entero entre 0 y 10.' },
+  eva_supuracion: { min: 0, max: 10, integer: true, message: 'EVA supuracion debe ser un entero entre 0 y 10.' },
+  flares_total_ultimo_anio: { min: 0, integer: true, message: 'Brotes en el ultimo año debe ser un entero mayor o igual a 0.' },
+  flares_desde_ultima_visita: { min: 0, integer: true, message: 'Brotes desde la ultima visita debe ser un entero mayor o igual a 0.' },
+  alcohol_cervezas_vino_semana: { min: 0, message: 'Cervezas/vino por semana debe ser mayor o igual a 0.' },
+  alcohol_copas_destilados_semana: { min: 0, message: 'Copas de destilados por semana debe ser mayor o igual a 0.' },
+  alcohol_ube_semana: { min: 0, message: 'UBE semana debe ser mayor o igual a 0.' }
+};
+
 function escapeCell(value) {
   if (value === null || value === undefined) return '';
   return String(value).replace(/\t/g, ' ').replace(/\r?\n/g, ' ').trim();
@@ -46,6 +57,23 @@ export function validatePayload(payload, circuit) {
         if (rule.max !== undefined && num > rule.max) errors.push(rule.message || `${field} por encima del maximo.`);
       }
     }
+  }
+
+  for (const field of Object.keys(RANGE_VALIDATORS)) {
+    const value = payload[field];
+    if (value === '' || value === null || value === undefined) continue;
+    const rule = RANGE_VALIDATORS[field];
+    const num = Number(value);
+    if (Number.isNaN(num)) {
+      errors.push(rule.message);
+      continue;
+    }
+    if (rule.integer && !Number.isInteger(num)) {
+      errors.push(rule.message);
+      continue;
+    }
+    if (rule.min !== undefined && num < rule.min) errors.push(rule.message);
+    if (rule.max !== undefined && num > rule.max) errors.push(rule.message);
   }
 
   return {
