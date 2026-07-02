@@ -1,0 +1,4114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario HS Valme</title>
+    <style>
+        :root {
+            --primary-color: #0f766e;
+            --secondary-color: #155e75;
+            --accent-color: #e7c46a;
+            --text-color: #11313f;
+            --muted-color: #526370;
+            --border-color: #d9e4ea;
+            --surface-color: rgba(255, 255, 255, 0.94);
+            --success-color: #0f766e;
+            --success-hover: #0d5c56;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --shadow-soft: 0 18px 42px rgba(15, 45, 61, 0.08);
+            --shadow-card: 0 10px 24px rgba(15, 45, 61, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Aptos", "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(15, 118, 110, 0.18), transparent 26%),
+                radial-gradient(circle at top right, rgba(231, 196, 106, 0.22), transparent 28%),
+                linear-gradient(180deg, #f5fbfb 0%, #eef4f6 100%);
+            color: var(--text-color);
+            line-height: 1.55;
+            padding: 1.75rem;
+            max-width: 1380px;
+            margin: 0 auto;
+        }
+
+        .header {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 1.75rem;
+            padding: 2rem 2.25rem;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #0f766e 0%, #155e75 55%, #254f6b 100%);
+            color: white;
+            box-shadow: 0 24px 48px rgba(15, 45, 61, 0.22);
+        }
+
+        .header::after {
+            content: "";
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            right: -110px;
+            top: -180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 68%);
+            pointer-events: none;
+        }
+
+        .header-copy {
+            position: relative;
+            z-index: 1;
+            max-width: 760px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.45rem 0.8rem;
+            margin-bottom: 0.9rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4vw, 2.85rem);
+            line-height: 1.05;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.03em;
+        }
+
+        .header-meta {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+            justify-content: flex-end;
+            align-items: flex-start;
+            min-width: 220px;
+        }
+
+        .meta-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.65rem 1rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            font-weight: 600;
+            font-size: 0.92rem;
+        }
+
+        .meta-pill.highlight {
+            background: rgba(231, 196, 106, 0.2);
+            border-color: rgba(231, 196, 106, 0.45);
+            color: #fff7db;
+        }
+
+        .info-panel,
+        .section {
+            background: var(--surface-color);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(217, 228, 234, 0.95);
+            border-radius: 24px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .info-panel {
+            margin-bottom: 1.5rem;
+            padding: 1.75rem;
+        }
+
+        .loader-panel {
+            background: var(--surface-color);
+            border: 1px solid rgba(217, 228, 234, 0.95);
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 1rem;
+            padding: 0.95rem 1rem;
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .loader-panel strong {
+            color: var(--secondary-color);
+        }
+
+        .loader-status {
+            color: var(--muted-color);
+            font-size: 0.9rem;
+        }
+
+        .loader-status.ok {
+            color: var(--success-color);
+            font-weight: 700;
+        }
+
+        .info-note {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0.85rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .note-card {
+            padding: 0.95rem 1rem;
+            border-radius: 16px;
+            border: 1px solid #d8e8e3;
+            background: linear-gradient(180deg, rgba(15, 118, 110, 0.08), rgba(255, 255, 255, 0.8));
+        }
+
+        .note-card strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: var(--primary-color);
+            font-size: 0.92rem;
+        }
+
+        .note-card span {
+            color: var(--muted-color);
+            font-size: 0.9rem;
+        }
+
+        .info-panel .two-columns,
+        .two-columns,
+        .three-columns {
+            display: grid;
+            gap: 1.2rem;
+        }
+
+        .info-panel .two-columns,
+        .two-columns {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .three-columns {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .column {
+            min-width: 0;
+        }
+
+        .fixed-info {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0.8rem 0.95rem;
+            border-radius: 16px;
+            background: linear-gradient(180deg, #fbfdfd 0%, #eef7f7 100%);
+            border: 1px solid #d5e5e6;
+            color: var(--muted-color);
+        }
+
+        .fixed-info strong {
+            color: var(--secondary-color);
+            flex-shrink: 0;
+        }
+
+        .cie-align-label {
+            visibility: hidden;
+        }
+
+        .toggle-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            min-height: 58px;
+            padding: 0.95rem 1rem;
+            border: 1px solid #ccdde2;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: 0.25s ease;
+            background: linear-gradient(180deg, #f8fbfc 0%, #eef5f7 100%);
+            color: var(--muted-color);
+            font-weight: 700;
+        }
+
+        .toggle-button:hover {
+            transform: translateY(-1px);
+            border-color: #9bc5bf;
+            color: var(--primary-color);
+        }
+
+        .toggle-button.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 12px 24px rgba(15, 118, 110, 0.18);
+        }
+
+        .toggle-icon {
+            font-size: 0.95rem;
+            letter-spacing: 0.08em;
+        }
+
+        .section {
+            margin-bottom: 1.35rem;
+            overflow: hidden;
+        }
+
+        .section-hidden {
+            display: none;
+        }
+
+        .section-header {
+            padding: 1rem 1.4rem;
+            background: linear-gradient(90deg, #f8fdfd 0%, #f2f7fa 100%);
+            color: var(--primary-color);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.25s ease;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            border-bottom: 1px solid #e7eef1;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(90deg, #f4fbfb 0%, #eef5f7 100%);
+        }
+
+        .section-header::after {
+            content: '▼';
+            font-size: 0.78rem;
+            color: var(--secondary-color);
+            transition: transform 0.25s ease;
+        }
+
+        .section-header.collapsed::after {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            padding: 1.45rem;
+            display: none;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        .section-note {
+            margin-bottom: 1rem;
+            padding: 0.95rem 1rem;
+            border-radius: 16px;
+            background: linear-gradient(180deg, #fffdfa 0%, #fff6e1 100%);
+            border: 1px solid #f0ddb0;
+            color: #8a6116;
+            font-size: 0.94rem;
+        }
+
+        .subtle-note {
+            color: var(--muted-color);
+            font-size: 0.88rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.45rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        .required {
+            color: var(--danger-color);
+            font-weight: 700;
+        }
+
+        input:required,
+        select:required {
+            border-left: 3px solid var(--primary-color);
+        }
+
+        input:required:invalid,
+        select:required:invalid {
+            border-left: 3px solid var(--danger-color);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+        }
+
+        .radio-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: var(--muted-color);
+        }
+
+        input[type="number"],
+        input[type="text"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.85rem 0.95rem;
+            border: 1px solid #cad8df;
+            border-radius: 14px;
+            font-size: 0.98rem;
+            background: #fbfdfe;
+            color: var(--text-color);
+            transition: 0.2s ease;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.1);
+            background: white;
+        }
+
+        textarea {
+            min-height: 92px;
+            resize: vertical;
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.82rem;
+            margin-top: 0.35rem;
+            display: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 240px;
+            padding: 1rem 1.4rem;
+            background: #0f6f7d;
+            color: white;
+            border: 1px solid transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            box-shadow: var(--shadow-card);
+            transition: 0.2s ease;
+        }
+
+        .button:hover {
+            transform: translateY(-1px);
+            filter: saturate(1.03);
+        }
+
+        .button-new {
+            background: #f3f8f6;
+            border-color: #9ec8c0;
+            color: #0f766e;
+            box-shadow: none;
+        }
+
+        .button-csv {
+            background: #0f6f7d;
+            color: #ffffff;
+        }
+
+        .button-txt {
+            background: #1f3f63;
+            color: #ffffff;
+        }
+
+        .comorbilidad-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 0.85rem;
+        }
+
+        .comorbilidad-item {
+            padding: 1rem;
+            background: linear-gradient(180deg, #f7fafb 0%, #edf3f5 100%);
+            border-radius: 16px;
+            border: 1px solid #dae5ea;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.2s ease;
+            color: var(--muted-color);
+            font-weight: 600;
+        }
+
+        .comorbilidad-item:hover {
+            border-color: #b7d1cb;
+            color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        .comorbilidad-item.active {
+            background: linear-gradient(135deg, #155e75 0%, #0f766e 100%);
+            border-color: #0f766e;
+            color: #ffffff;
+            box-shadow: 0 14px 24px rgba(15, 118, 110, 0.24);
+        }
+
+        .comorbilidad-item.active:hover {
+            color: #ffffff;
+        }
+
+        .prom-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.9rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .summary-card {
+            padding: 1rem;
+            border-radius: 18px;
+            border: 1px solid #d7e4ea;
+            background: linear-gradient(180deg, #ffffff 0%, #f4f8fa 100%);
+            box-shadow: var(--shadow-card);
+        }
+
+        .summary-card strong {
+            display: block;
+            font-size: 1.7rem;
+            letter-spacing: -0.03em;
+            color: var(--secondary-color);
+            margin: 0.2rem 0 0.15rem;
+        }
+
+        .summary-card span {
+            display: block;
+            color: var(--muted-color);
+            font-size: 0.88rem;
+        }
+
+        .summary-card .summary-title {
+            font-weight: 700;
+            color: var(--text-color);
+            font-size: 0.88rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .counter-region-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 0.9rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .region-card {
+            padding: 1rem;
+            border-radius: 18px;
+            border: 1px solid #d8e4ea;
+            background: linear-gradient(180deg, #ffffff 0%, #f5f9fb 100%);
+            box-shadow: var(--shadow-card);
+        }
+
+        .region-title {
+            margin-bottom: 0.8rem;
+            font-weight: 800;
+            color: var(--secondary-color);
+            letter-spacing: 0.01em;
+        }
+
+        .counter-row {
+            display: grid;
+            grid-template-columns: 52px 1fr;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 0.55rem;
+        }
+
+        .counter-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.45rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            border: 1px solid transparent;
+        }
+
+        .counter-label.nodulo {
+            background: #f8f0de;
+            border-color: #ead3a2;
+            color: #9a6a1f;
+        }
+
+        .counter-label.absceso {
+            background: #f7ebe8;
+            border-color: #e6cbc6;
+            color: #a85a4d;
+        }
+
+        .counter-label.fistula {
+            background: #eeebf8;
+            border-color: #d8cef0;
+            color: #6455a7;
+        }
+
+        .counter-label.fistula-drenante {
+            background: #e7f3f2;
+            border-color: #c8e0dc;
+            color: #0f766e;
+        }
+
+        .counter-ctl {
+            display: grid;
+            grid-template-columns: 42px 1fr 42px;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .counter-btn {
+            width: 42px;
+            height: 42px;
+            border: none;
+            border-radius: 12px;
+            background: #edf4f7;
+            color: var(--secondary-color);
+            cursor: pointer;
+            font-size: 1.15rem;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .counter-btn:hover {
+            background: #dfecef;
+            transform: translateY(-1px);
+        }
+
+        .counter-value {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            border-radius: 12px;
+            border: 1px solid #d5e2e8;
+            background: white;
+            font-weight: 800;
+            color: var(--text-color);
+        }
+
+        .ihs4-formula {
+            margin-bottom: 0.95rem;
+            color: #64748b;
+            font-size: 0.88rem;
+            font-style: italic;
+        }
+
+        .ihs4-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 1rem 1.2rem;
+            border-radius: 18px;
+            border: 1px solid #d7e4ea;
+            background: linear-gradient(135deg, #edf5f7 0%, #e8f1f4 100%);
+            box-shadow: var(--shadow-card);
+            color: var(--text-color);
+        }
+
+        .ihs4-totals {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            align-items: center;
+        }
+
+        .ihs4-total-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 700;
+            padding: 0.5rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #d8e4ea;
+        }
+
+        .ihs4-total-chip::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .ihs4-total-chip.n::before {
+            background: #f59e0b;
+        }
+
+        .ihs4-total-chip.a::before {
+            background: #ef4444;
+        }
+
+        .ihs4-total-chip.f::before {
+            background: #7d6bc7;
+        }
+
+        .ihs4-total-chip.fd::before {
+            background: #0f766e;
+        }
+
+        .ihs4-score-block {
+            text-align: right;
+            min-width: 150px;
+        }
+
+        .ihs4-score-block strong {
+            display: block;
+            font-size: 2.15rem;
+            line-height: 1;
+            color: var(--secondary-color);
+        }
+
+        .ihs4-grade {
+            display: block;
+            margin-top: 0.2rem;
+            color: var(--primary-color);
+            font-size: 0.84rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .score-panel {
+            display: grid;
+            grid-template-columns: minmax(0, 1.6fr) minmax(240px, 0.8fr);
+            gap: 1rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .score-breakdown,
+        .score-total {
+            padding: 1rem 1.1rem;
+            border-radius: 18px;
+            border: 1px solid #d7e4ea;
+            background: linear-gradient(180deg, #ffffff 0%, #f5f9fb 100%);
+        }
+
+        .score-breakdown {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .score-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 0.9rem;
+            border-radius: 999px;
+            background: #eef5f7;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        .score-chip b {
+            color: var(--secondary-color);
+        }
+
+        .score-total {
+            text-align: center;
+        }
+
+        .score-total-label {
+            display: block;
+            color: var(--muted-color);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .score-total strong {
+            display: block;
+            margin: 0.25rem 0 0.35rem;
+            font-size: 2.1rem;
+            line-height: 1;
+            color: var(--secondary-color);
+        }
+
+        .score-severity {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 118px;
+            padding: 0.45rem 0.8rem;
+            border-radius: 999px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        details.questionnaire {
+            margin-top: 0.9rem;
+            border: 1px solid #d9e4ea;
+            border-radius: 18px;
+            background: linear-gradient(180deg, #ffffff 0%, #f7fafb 100%);
+            overflow: hidden;
+        }
+
+        details.questionnaire summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 1rem 1.1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            background: #f5fafb;
+        }
+
+        details.questionnaire summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details.questionnaire summary::after {
+            content: "Desplegar";
+            color: var(--muted-color);
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        details.questionnaire[open] summary::after {
+            content: "Plegar";
+        }
+
+        .questionnaire-body {
+            padding: 1rem 1.1rem 1.1rem;
+        }
+
+        .questionnaire-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .questionnaire-table th,
+        .questionnaire-table td {
+            padding: 0.75rem 0.7rem;
+            border-top: 1px solid #e5edf1;
+            vertical-align: top;
+        }
+
+        .questionnaire-table thead th {
+            border-top: none;
+            color: var(--muted-color);
+            text-align: left;
+            font-size: 0.84rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .questionnaire-table tbody td:first-child {
+            width: 62%;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .question-subnote {
+            display: block;
+            margin-top: 0.35rem;
+            color: var(--muted-color);
+            font-size: 0.82rem;
+            font-weight: 500;
+        }
+
+        .questionnaire-table td:last-child {
+            width: 38%;
+        }
+
+        .answer-group {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 0.35rem;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+
+        .answer-option {
+            border: 1px solid #cfdae0;
+            border-radius: 999px;
+            background: #f8fbfc;
+            color: var(--muted-color);
+            padding: 0.46rem 0.72rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+
+        .answer-option:hover {
+            border-color: #9bc5bf;
+            color: var(--primary-color);
+            background: #f2f9f8;
+        }
+
+        .answer-option.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 10px 20px rgba(15, 118, 110, 0.18);
+        }
+
+        .therapy-stack {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .therapy-group-card {
+            padding: 1rem;
+            border-radius: 18px;
+            border: 1px solid #d8e4ea;
+            background: linear-gradient(180deg, #ffffff 0%, #f5f9fb 100%);
+            box-shadow: var(--shadow-card);
+        }
+
+        .therapy-group-header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .dlqi-subquestion {
+            margin-top: 0.6rem;
+        }
+
+        .therapy-group-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--secondary-color);
+        }
+
+        .therapy-group-copy {
+            color: var(--muted-color);
+            font-size: 0.9rem;
+        }
+
+        .therapy-rows {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .therapy-row {
+            display: grid;
+            grid-template-columns: minmax(220px, 0.9fr) minmax(220px, 1.1fr) auto;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .therapy-actions {
+            display: inline-flex;
+            gap: 0.45rem;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .therapy-action {
+            width: 42px;
+            height: 42px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.15rem;
+            font-weight: 800;
+            transition: 0.2s ease;
+        }
+
+        .therapy-action.add {
+            background: #e7f3f2;
+            color: var(--primary-color);
+        }
+
+        .therapy-action.add:hover {
+            background: #d7ebe8;
+        }
+
+        .therapy-action.remove {
+            background: #f8ece9;
+            color: #a85a4d;
+        }
+
+        .therapy-action.remove:hover {
+            background: #f0dfdb;
+        }
+
+        .therapy-action-placeholder {
+            display: inline-block;
+            width: 42px;
+            height: 42px;
+        }
+
+        .seguimiento-decision-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .seguimiento-decision-btn {
+            border: 1px solid #c6d4db;
+            border-radius: 16px;
+            background: #f2f6f8;
+            color: #3f566f;
+            font-weight: 800;
+            padding: 0.9rem 1rem;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .seguimiento-decision-btn.active {
+            background: #22a447;
+            border-color: transparent;
+            color: #ffffff;
+            box-shadow: 0 12px 24px rgba(34, 164, 71, 0.25);
+        }
+
+        .seguimiento-panel {
+            margin-top: 0.8rem;
+            padding: 1rem;
+            border-radius: 16px;
+            border: 1px solid #d8e4ea;
+            background: linear-gradient(180deg, #ffffff 0%, #f7fafb 100%);
+        }
+
+        .seguimiento-readonly {
+            background: #f1f6f8;
+            color: #3f566f;
+            border-color: #cddce3;
+            font-weight: 600;
+        }
+
+        .therapy-group-card.therapy-group-compact {
+            margin-top: 0.85rem;
+            padding: 0.9rem;
+        }
+
+        .morisky-grid {
+            display: grid;
+            gap: 0.8rem;
+            margin-top: 0.7rem;
+        }
+
+        .morisky-row {
+            padding-top: 0.75rem;
+            border-top: 1px solid #e5edf1;
+        }
+
+        .morisky-row:first-child {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .morisky-question {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.45rem;
+        }
+
+        .morisky-result {
+            margin-top: 0.7rem;
+            padding: 0.7rem 0.85rem;
+            border-radius: 12px;
+            border: 1px solid #d6e3e9;
+            background: #f3f8fa;
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+
+        .scale-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .scale-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.45rem 0.7rem;
+            border-radius: 999px;
+            background: #eef5f7;
+            color: var(--muted-color);
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .field-inline {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 0.9rem;
+            align-items: center;
+            margin-bottom: 0.95rem;
+        }
+
+        .field-inline input {
+            margin: 0;
+        }
+
+        @media (max-width: 980px) {
+            .info-panel .two-columns,
+            .two-columns,
+            .three-columns,
+            .score-panel,
+            .field-inline {
+                grid-template-columns: 1fr;
+            }
+
+            .seguimiento-decision-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-meta {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header,
+            .info-panel,
+            .section-content {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .header {
+                padding-top: 1.4rem;
+                padding-bottom: 1.4rem;
+            }
+
+            .section-content {
+                padding-top: 1.1rem;
+                padding-bottom: 1.1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
+
+            .ihs4-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .ihs4-score-block {
+                text-align: left;
+            }
+
+            .questionnaire-table,
+            .questionnaire-table thead,
+            .questionnaire-table tbody,
+            .questionnaire-table th,
+            .questionnaire-table td,
+            .questionnaire-table tr {
+                display: block;
+            }
+
+            .questionnaire-table thead {
+                display: none;
+            }
+
+            .questionnaire-table tbody td {
+                width: 100%;
+                border-top: none;
+                padding: 0.35rem 0;
+            }
+
+            .questionnaire-table tbody tr {
+                padding: 0.8rem 0;
+                border-top: 1px solid #e5edf1;
+            }
+
+            .answer-group {
+                gap: 0.4rem;
+                flex-wrap: wrap;
+                overflow-x: visible;
+            }
+
+            .answer-option {
+                flex: 1 1 120px;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .therapy-row {
+                grid-template-columns: 1fr;
+            }
+
+            .therapy-actions {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div style="background:#fef3c7;border-bottom:1px solid #f59e0b;padding:1rem 1.5rem;text-align:center;font-family:'Aptos','IBM Plex Sans','Segoe UI',system-ui,sans-serif;color:#92400e;">
+        <strong>Version legacy</strong> — Este formulario ha sido reemplazado por el
+        <a href="hs_valme_hub/index.html" style="color:#92400e;text-decoration:underline;font-weight:700;">Hub Clinico HS Valme</a>.
+        Use el hub para nuevos registros. Este archivo se mantendra como referencia historica.
+    </div>
+    <div class="header">
+        <div class="header-copy">
+            <h1>Formulario estructurado de hidradenitis supurativa</h1>
+        </div>
+        <div class="header-meta">
+            <span class="meta-pill">Hospital Universitario de Valme</span>
+            <span class="meta-pill">AGS Sur de Sevilla</span>
+            <span class="meta-pill highlight">Uso asistencial interno</span>
+        </div>
+    </div>
+
+    <div class="loader-panel">
+        <strong>Base HS (Excel/CSV) para precarga de seguimiento</strong>
+        <div style="display:flex; gap:0.65rem; align-items:center; flex-wrap:wrap;">
+            <button type="button" class="button button-new" id="loadBaseBtn" style="min-width: 0; padding: 0.7rem 1rem;">Cargar Base</button>
+            <input type="file" id="baseFileInput" accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" class="hidden">
+            <span id="baseStatus" class="loader-status">Sin base cargada en esta sesion.</span>
+        </div>
+    </div>
+
+    <!-- Panel de información inicial -->
+    <div class="info-panel">
+        <div class="info-note">
+            <div class="note-card">
+                <strong>Consulta monografica</strong>
+                <span>Primera linea especializada y seguimiento dermatologico.</span>
+            </div>
+            <div class="note-card">
+                <strong>Consulta multidisciplinar</strong>
+                <span>Alta resolucion Derma-Cirugia para casos complejos o candidatos a cirugia.</span>
+            </div>
+        </div>
+        <!-- Fila 1: NHS y Fecha -->
+        <div class="two-columns">
+            <div class="column">
+                <div class="form-group">
+                    <label>NUSHA: <span style="color: red;">*</span></label>
+                    <input type="text" name="nusha" placeholder="Introduce NUSHA (AN + 10 números)" pattern="[A-Z]{2}[0-9]{10}" maxlength="12" required>
+                </div>
+            </div>
+            <div class="column">
+                <div class="form-group">
+                    <label>Fecha: <span style="color: red;">*</span></label>
+                    <input type="date" name="fecha" id="fechaActual" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fila 2: Consulta y Origen del Paciente -->
+        <div class="two-columns">
+            <div class="column">
+                <div class="form-group">
+                    <label>Consulta: <span style="color: red;">*</span></label>
+                    <select name="consulta" required onchange="actualizarOrigenPaciente()">
+                        <option value="">Seleccione una opción</option>
+                        <option value="monografica">Monografica</option>
+                        <option value="multidisciplinar">Multidisciplinar</option>
+                    </select>
+                </div>
+            </div>
+            <div class="column">
+                <div class="form-group">
+                    <label>Origen del Paciente: <span style="color: red;">*</span></label>
+                    <select name="origenPaciente" required>
+                        <option value="">Seleccione una opción</option>
+                        <option value="derma_gral">Derma Gral</option>
+                        <option value="atencion_primaria">Atención Primaria</option>
+                        <option value="infecciosas">Infecciosas</option>
+                        <option value="urgencias">Urgencias</option>
+                        <option value="cirugia_general">Cirugía General</option>
+                        <option value="cirugia_plastica">Cirugía Plástica</option>
+                        <option value="ginecologia">Ginecología</option>
+                        <option value="urologia">Urología</option>
+                        <option value="monografica">Monografica</option>
+                        <option value="multidisciplinar">Multidisciplinar</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fila 3: Tipo de visita y CIE -->
+        <div class="two-columns">
+            <div class="column">
+                <div class="form-group">
+                    <label>Tipo de visita: <span style="color: red;">*</span></label>
+                    <select name="tipoVisita" required onchange="actualizarOrigenPaciente()">
+                        <option value="">Seleccione una opción</option>
+                        <option value="primera">Primera visita</option>
+                        <option value="seguimiento">Seguimiento</option>
+                    </select>
+                </div>
+            </div>
+            <div class="column">
+                <div class="form-group">
+                    <label class="cie-align-label">Tipo de visita</label>
+                    <div class="fixed-info">
+                        <strong>CIE:</strong>
+                        <span>L73.2 - Hidradenitis supurativa</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fila 4: Analítica Sanguínea y Medicina Preventiva -->
+        <div class="two-columns">
+            <div class="column">
+                <div class="form-group">
+                    <div class="toggle-button" id="analiticaBtn" onclick="toggleAnalytica()">
+                        <span class="toggle-icon">LAB</span>
+                        <span>Analitica sanguinea</span>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="form-group">
+                    <div class="toggle-button" id="medicinaBtn" onclick="toggleMedicina()">
+                        <span class="toggle-icon">MP</span>
+                        <span>Medicina Preventiva</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. Anamnesis -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection('anamnesis')">
+            ANAMNESIS
+        </div>
+        <div id="anamnesis" class="section-content">
+            <div class="two-columns">
+                <!-- Columna 1 -->
+                <div class="column">
+                    <div class="form-group">
+                        <label>Antecedentes familiares HS</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="antecedentes" value="si"> Sí
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="antecedentes" value="no"> No
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Año inicio</label>
+                        <input type="number" name="anioInicio" min="1900" max="2100" onchange="validarAnio(this)">
+                        <div class="error-message">El año debe estar entre 1900 y 2100</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fumador</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="fumador" value="si" onclick="toggleCamposFumador()"> Sí
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="fumador" value="no" onclick="toggleCamposFumador()"> No
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group hidden" id="cigarrosDia">
+                        <label>Cigarros/día</label>
+                        <input type="number" name="cigarros" min="0" max="50" onchange="validarCigarros(this)">
+                        <div class="error-message">El número debe estar entre 0 y 50</div>
+                    </div>
+
+                    <div class="form-group hidden" id="aniosFumador">
+                        <label>Años fumador</label>
+                        <input type="number" name="aniosFumador" min="0" max="100" onchange="validarAniosFumador(this)">
+                        <div class="error-message">El número debe estar entre 0 y 100</div>
+                    </div>
+                </div>
+
+                <!-- Columna 2 -->
+                <div class="column">
+                    <div class="form-group">
+                        <label>Sexo al nacimiento</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="sexo" value="masculino"> Masculino
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="sexo" value="femenino"> Femenino
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Año diagnóstico</label>
+                        <input type="number" name="anioDiagnostico" min="1900" max="2100" onchange="validarAnio(this)">
+                        <div class="error-message">El año debe estar entre 1900 y 2100</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Peso (Kg)</label>
+                        <input type="number" name="peso" min="0" onchange="calcularIMC()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Talla (m)</label>
+                        <input type="number" name="talla" step="0.01" onchange="calcularIMC()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>IMC</label>
+                        <input type="number" name="imc" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Comorbilidades -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection('comorbilidades')">
+            COMORBILIDADES
+        </div>
+        <div id="comorbilidades" class="section-content">
+            <div class="comorbilidad-grid">
+                <div class="comorbilidad-item" data-comorb-key="comorb_diabetes_tipo_ii" onclick="toggleComorbilidad(this)">Diabetes tipo II</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_hta" onclick="toggleComorbilidad(this)">HTA</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_dislipemia" onclick="toggleComorbilidad(this)">Dislipemia</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_enf_cardiovascular" onclick="toggleComorbilidad(this)">Enf. Cardiovascular</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_sindrome_metabolico" onclick="toggleComorbilidad(this)">Síndrome metabólico</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_esteatosis_hepatica" onclick="toggleComorbilidad(this)">Esteatosis hepática</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_sinus_pilonidal" onclick="toggleComorbilidad(this)">Sinus pilonidal</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_colitis_ulcerosa" onclick="toggleComorbilidad(this)">Colitis ulcerosa</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_crohn" onclick="toggleComorbilidad(this)">Enf. de Crohn</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_artritis" onclick="toggleComorbilidad(this)">Artritis</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_psoriasis" onclick="toggleComorbilidad(this)">Psoriasis</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_sop" onclick="toggleComorbilidad(this)">SOP</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_acne" onclick="toggleComorbilidad(this)">Acné</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_depresion" onclick="toggleComorbilidad(this)">Depresión</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_ansiedad" onclick="toggleComorbilidad(this)">Ansiedad</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_pash_papash" onclick="toggleComorbilidad(this)">PASH/PAPASH</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_pioderma_gangrenoso" onclick="toggleComorbilidad(this)">Pioderma gangrenoso</div>
+                <div class="comorbilidad-item" data-comorb-key="comorb_foliculitis_decalvante" onclick="toggleComorbilidad(this)">Foliculitis decalvante</div>
+            </div>
+            
+            <div class="form-group" style="margin-top: 1.5rem;">
+                <label>Otras comorbilidades:</label>
+                <textarea name="otrasComorbilidades" rows="2" style="width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; resize: vertical;"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Regiones Afectas -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection('regiones')">
+            REGIONES AFECTAS E IHS4
+        </div>
+        <div id="regiones" class="section-content">
+            <p class="ihs4-formula">IHS4 = Nodulos x 1 + Abscesos x 2 + Fistulas drenantes x 4 | Leve &lt; 4 | Moderado 4-10 | Grave &gt; 10</p>
+            <div id="ihsRegionGrid" class="counter-region-grid"></div>
+            <div class="ihs4-footer">
+                <div class="ihs4-totals">
+                    <span class="ihs4-total-chip n">Nodulos: <b id="ihs4TotalN">0</b></span>
+                    <span class="ihs4-total-chip a">Abscesos: <b id="ihs4TotalA">0</b></span>
+                    <span class="ihs4-total-chip f">Fistulas: <b id="ihs4TotalF">0</b></span>
+                    <span class="ihs4-total-chip fd">FD: <b id="ihs4TotalFd">0</b></span>
+                </div>
+                <div class="ihs4-score-block">
+                    <span class="score-total-label">IHS4 SCORE</span>
+                    <strong id="ihs4Resultado">0</strong>
+                    <span id="ihs4Gravedad" class="ihs4-grade">Leve</span>
+                </div>
+            </div>
+            <div class="three-columns">
+                <div class="column">
+                    <div class="form-group">
+                        <label>Otras regiones / detalle anatomico</label>
+                        <textarea id="otrasRegiones" rows="3" placeholder="Especificar si existen localizaciones fuera del mapa base"></textarea>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="form-group">
+                        <label>Cicatrices</label>
+                        <input type="number" id="cicatrices" min="0">
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="form-group">
+                        <label>Otras lesiones relevantes</label>
+                        <textarea id="otrasLesiones" rows="3" placeholder="Quistes epidermoides, lesiones residuales o comentarios clinicos"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="seguimientoPreloadCard" class="note-card hidden" style="margin-top: 1rem;">
+            <strong>Tratamiento actual previo</strong>
+            <span id="seguimientoTratamientoPrevioTexto"></span>
+        </div>
+    </div>
+
+    <!-- 4. Prueba Ecográfica -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection('prueba')">
+            PRUEBA ECOGRÁFICA
+        </div>
+        <div id="prueba" class="section-content">
+            <!-- Resultado del IHS-4 Ecográfico centrado con escala de gravedad -->
+            <div class="ihs4-result">
+                <label>IHS-4 Ecográfico: </label>
+                <span id="ihs4EcograficoResultado">0</span>
+                <span id="ihs4EcograficoGravedad" style="display: inline-block; margin-left: 10px; padding: 2px 8px; border-radius: 4px; font-weight: bold;"></span>
+            </div>
+
+            <!-- Sección IHS-4 Ecográfico -->
+            <div class="two-columns">
+                <!-- Columna 1: Variables para el cálculo del IHS-4 Ecográfico -->
+                <div class="column">
+                    <div class="form-group">
+                        <label>Nódulos (cálculo IHS4 Ecográfico)</label>
+                        <input type="number" id="nodulosEco" min="0" onchange="calcularIHS4Ecografico()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Abscesos (cálculo IHS4 Ecográfico)</label>
+                        <input type="number" id="abscesosEco" min="0" onchange="calcularIHS4Ecografico()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fístulas (cálculo IHS4 Ecográfico)</label>
+                        <input type="number" id="fistulasEco" min="0" onchange="calcularIHS4Ecografico()">
+                    </div>
+                </div>
+
+                <!-- Columna 2: Doppler -->
+                <div class="column">
+                    <div class="form-group">
+                        <label>Doppler +</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="doppler" value="si"> Sí
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="doppler" value="no"> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. PROMs -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection('proms')">
+            PROMs
+        </div>
+        <div id="proms" class="section-content">
+            <div class="section-note">El formulario calcula automaticamente el impacto del paciente a partir de las respuestas y devuelve la interpretacion clinica resultante.</div>
+            <div class="prom-summary-grid">
+                <div class="summary-card">
+                    <span class="summary-title">DLQI total</span>
+                    <strong id="dlqiTotal">0</strong>
+                    <span id="dlqiInterpretacion">No evaluado</span>
+                </div>
+                <div class="summary-card">
+                    <span class="summary-title">HSQoL-24</span>
+                    <strong id="hsqolTotal">0</strong>
+                    <span id="hsqolInterpretacion">No evaluado</span>
+                </div>
+                <div class="summary-card">
+                    <span class="summary-title">EVA dolor</span>
+                    <strong id="evaDolorValor">0</strong>
+                    <span>Escala 0-10</span>
+                </div>
+            </div>
+            <div class="form-group" style="max-width: 240px;">
+                <label>EVA Dolor</label>
+                <input type="number" id="evaDolor" min="0" max="10" onchange="actualizarEvaDolor()">
+            </div>
+
+            <details class="questionnaire">
+                <summary>DLQI (10 items)</summary>
+                <div class="questionnaire-body">
+                    <p class="subtle-note" style="margin-bottom: 0.8rem;">Ultimos 7 dias. Version en castellano segun el cuestionario aportado.</p>
+                    <div class="scale-strip">
+                        <span class="scale-pill">Mucho = 3</span>
+                        <span class="scale-pill">Bastante = 2</span>
+                        <span class="scale-pill">Un poco = 1</span>
+                        <span class="scale-pill">Nada / Sin relacion = 0</span>
+                    </div>
+                    <table class="questionnaire-table">
+                        <thead>
+                            <tr>
+                                <th>Pregunta</th>
+                                <th>Respuesta</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dlqiQuestions"></tbody>
+                    </table>
+                </div>
+            </details>
+
+            <details class="questionnaire">
+                <summary>HSQoL-24</summary>
+                <div class="questionnaire-body">
+                    <p class="subtle-note" style="margin-bottom: 0.8rem;">Ultimas 4 semanas. El resultado se interpreta automaticamente tras responder los items.</p>
+                    <div class="scale-strip">
+                        <span class="scale-pill">Nunca = 0</span>
+                        <span class="scale-pill">Raramente = 1</span>
+                        <span class="scale-pill">A veces = 2</span>
+                        <span class="scale-pill">A menudo = 3</span>
+                        <span class="scale-pill">Siempre = 4</span>
+                    </div>
+                    <table class="questionnaire-table">
+                        <thead>
+                            <tr>
+                                <th>Pregunta</th>
+                                <th>Respuesta</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hsqolQuestions"></tbody>
+                    </table>
+                </div>
+            </details>
+        </div>
+    </div>
+
+    <!-- 6. Cirugia -->
+    <div class="section" id="cirugiaSection">
+        <div class="section-header" onclick="toggleSection('cirugia')">
+            CIRUGIA
+        </div>
+        <div id="cirugia" class="section-content">
+            <div class="section-note">Este bloque solo aplica a la primera visita de la consulta monografica.</div>
+            <h4 style="color: var(--primary-color); margin-bottom: 15px; font-size: 1.1rem;">Requiere cirugia</h4>
+            
+            <div class="form-group">
+                <div class="field-inline">
+                    <label class="radio-label">
+                        <input type="checkbox" name="cirugiaDermatologia" value="si"> Dermatologia
+                    </label>
+                    <input type="text" name="consideracionesDermatologia" placeholder="Consideraciones...">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="field-inline">
+                    <label class="radio-label">
+                        <input type="checkbox" name="cirugiaGeneral" value="si"> Cirugia General
+                    </label>
+                    <input type="text" name="consideracionesGeneral" placeholder="Consideraciones...">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="field-inline">
+                    <label class="radio-label">
+                        <input type="checkbox" name="cirugiaPlastica" value="si"> Cirugia Plastica
+                    </label>
+                    <input type="text" name="consideracionesPlastica" placeholder="Consideraciones...">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="field-inline">
+                    <label class="radio-label">
+                        <input type="checkbox" name="cirugiaGinecologia" value="si"> Ginecologia
+                    </label>
+                    <input type="text" name="consideracionesGinecologia" placeholder="Consideraciones...">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="field-inline">
+                    <label class="radio-label">
+                        <input type="checkbox" name="cirugiaUrologia" value="si"> Urologia
+                    </label>
+                    <input type="text" name="consideracionesUrologia" placeholder="Consideraciones...">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Farmacoterapia -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection('farmacoterapia')">
+            FARMACOTERAPIA
+        </div>
+        <div id="farmacoterapia" class="section-content">
+            <div id="farmacoPrimeraBlock">
+                <div class="section-note">Tratamiento activo organizado por familias. Cada fila combina farmaco y posologia, y permite anadir lineas adicionales dentro de la misma familia.</div>
+                <div class="therapy-stack">
+                    <div class="therapy-group-card">
+                        <div class="therapy-group-header">
+                            <div>
+                                <div class="therapy-group-title">Topicos</div>
+                                <div class="therapy-group-copy">Clindamicina topica o resorcinol, con posibilidad de varias lineas activas.</div>
+                            </div>
+                        </div>
+                        <div id="therapy-topicos" class="therapy-rows"></div>
+                    </div>
+
+                    <div class="therapy-group-card">
+                        <div class="therapy-group-header">
+                            <div>
+                                <div class="therapy-group-title">Antibioticos orales</div>
+                                <div class="therapy-group-copy">Doxiciclina, clindamicina oral y rifampicina con su posologia asociada.</div>
+                            </div>
+                        </div>
+                        <div id="therapy-antibioticos_orales" class="therapy-rows"></div>
+                    </div>
+
+                    <div class="therapy-group-card">
+                        <div class="therapy-group-header">
+                            <div>
+                                <div class="therapy-group-title">Biologicos</div>
+                                <div class="therapy-group-copy">Registro independiente de tratamiento biologico y pauta activa.</div>
+                            </div>
+                        </div>
+                        <div id="therapy-biologicos" class="therapy-rows"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="farmacoSeguimientoBlock" class="hidden">
+                <div class="section-note">En seguimiento, la decision terapeutica es exclusiva: continuar tratamiento o cambiar tratamiento.</div>
+                <input type="hidden" id="seguimientoDecision" value="">
+                <div class="seguimiento-decision-grid">
+                    <button type="button" id="seguimientoContinuarBtn" class="seguimiento-decision-btn" onclick="setSeguimientoDecision('continuar')">Continuar Tratamiento</button>
+                    <button type="button" id="seguimientoCambiarBtn" class="seguimiento-decision-btn" onclick="setSeguimientoDecision('cambiar')">Cambiar Tratamiento</button>
+                </div>
+
+                <div id="seguimientoContinuarPanel" class="seguimiento-panel hidden">
+                    <div class="form-group">
+                        <label>Tratamiento actual (precargado)</label>
+                        <input type="text" id="seguimientoTratamientoActual" class="seguimiento-readonly" readonly placeholder="Sin tratamiento precargado">
+                    </div>
+                    <div class="form-group">
+                        <label>Ajuste de pauta / posologia</label>
+                        <textarea id="seguimientoAjuste" rows="3" placeholder="Describa ajustes en dosis o frecuencia del tratamiento actual"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Adherencia</label>
+                        <select id="seguimientoAdherencia">
+                            <option value="">Seleccione una opcion</option>
+                            <option value="buena">Buena</option>
+                            <option value="regular">Regular</option>
+                            <option value="mala">Mala</option>
+                        </select>
+                    </div>
+                    <details class="questionnaire" open>
+                        <summary>Morisky-Green (4 preguntas)</summary>
+                        <div class="questionnaire-body">
+                            <div class="morisky-grid">
+                                <div class="morisky-row">
+                                    <div class="morisky-question">1. ¿Olvida alguna vez tomar los medicamentos?</div>
+                                    <input type="hidden" id="morisky-0" value="">
+                                    <div class="answer-group">
+                                        <button type="button" class="answer-option" onclick="setMoriskyAnswer(0, 'si', this)">Si</button>
+                                        <button type="button" class="answer-option" onclick="setMoriskyAnswer(0, 'no', this)">No</button>
+                                    </div>
+                                </div>
+                                <div class="morisky-row">
+                                    <div class="morisky-question">2. ¿Toma los medicamentos a la hora indicada?</div>
+                                    <input type="hidden" id="morisky-1" value="">
+                                    <div class="answer-group">
+                                        <button type="button" class="answer-option" onclick="setMoriskyAnswer(1, 'si', this)">Si</button>
+                                        <button type="button" class="answer-option" onclick="setMoriskyAnswer(1, 'no', this)">No</button>
+                                    </div>
+                                </div>
+                                <div class="morisky-row">
+                                    <div class="morisky-question">3. Cuando se encuentra bien, ¿deja de tomar la medicacion?</div>
+                                    <input type="hidden" id="morisky-2" value="">
+                                    <div class="answer-group">
+                                        <button type="button" class="answer-option" onclick="setMoriskyAnswer(2, 'si', this)">Si</button>
+                                        <button type="button" class="answer-option" onclick="setMoriskyAnswer(2, 'no', this)">No</button>
+                                    </div>
+                                </div>
+                                <div class="morisky-row">
+                                    <div class="morisky-question">4. Si alguna vez le sienta mal, ¿deja de tomarla?</div>
+                                    <input type="hidden" id="morisky-3" value="">
+                                    <div class="answer-group">
+                                        <button type="button" class="answer-option" onclick="setMoriskyAnswer(3, 'si', this)">Si</button>
+                                        <button type="button" class="answer-option" onclick="setMoriskyAnswer(3, 'no', this)">No</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="moriskyResultado" class="morisky-result">Cuestionario no evaluado</div>
+                        </div>
+                    </details>
+                    <div class="therapy-group-card therapy-group-compact">
+                        <div class="therapy-group-header">
+                            <div>
+                                <div class="therapy-group-title">Tratamiento concomitante (opcional)</div>
+                                <div class="therapy-group-copy">Registrar por familia, farmaco y posologia para mantener trazabilidad estructurada.</div>
+                            </div>
+                        </div>
+                        <div class="therapy-stack">
+                            <div class="therapy-group-card">
+                                <div class="therapy-group-header">
+                                    <div>
+                                        <div class="therapy-group-title">Topicos (concomitante)</div>
+                                    </div>
+                                </div>
+                                <div id="followup-concomitante-topicos" class="therapy-rows"></div>
+                            </div>
+                            <div class="therapy-group-card">
+                                <div class="therapy-group-header">
+                                    <div>
+                                        <div class="therapy-group-title">Antibioticos orales (concomitante)</div>
+                                    </div>
+                                </div>
+                                <div id="followup-concomitante-antibioticos_orales" class="therapy-rows"></div>
+                            </div>
+                            <div class="therapy-group-card">
+                                <div class="therapy-group-header">
+                                    <div>
+                                        <div class="therapy-group-title">Biologicos (concomitante)</div>
+                                    </div>
+                                </div>
+                                <div id="followup-concomitante-biologicos" class="therapy-rows"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="seguimientoCambiarPanel" class="seguimiento-panel hidden">
+                    <div class="form-group">
+                        <label>Motivo del cambio</label>
+                        <textarea id="seguimientoMotivoCambio" rows="3" placeholder="Describa el motivo clinico del cambio terapeutico"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="radio-label">
+                            <input type="checkbox" id="seguimientoEfectosAdversos" value="si"> Efectos adversos
+                        </label>
+                    </div>
+                    <div class="therapy-stack">
+                        <div class="therapy-group-card">
+                            <div class="therapy-group-header">
+                                <div>
+                                    <div class="therapy-group-title">Topicos (nuevo esquema)</div>
+                                </div>
+                            </div>
+                            <div id="followup-therapy-topicos" class="therapy-rows"></div>
+                        </div>
+                        <div class="therapy-group-card">
+                            <div class="therapy-group-header">
+                                <div>
+                                    <div class="therapy-group-title">Antibioticos orales (nuevo esquema)</div>
+                                </div>
+                            </div>
+                            <div id="followup-therapy-antibioticos_orales" class="therapy-rows"></div>
+                        </div>
+                        <div class="therapy-group-card">
+                            <div class="therapy-group-header">
+                                <div>
+                                    <div class="therapy-group-title">Biologicos (nuevo esquema)</div>
+                                </div>
+                            </div>
+                            <div id="followup-therapy-biologicos" class="therapy-rows"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Otros Comentarios</label>
+                <textarea name="otrosComentarios" rows="3" style="width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; resize: vertical;" placeholder="Añade la información que consideres relevante"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. Hallazgos de interés -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection('hallazgos')">
+            HALLAZGOS DE INTERÉS
+        </div>
+        <div id="hallazgos" class="section-content">
+            <div class="form-group">
+                <label>Hallazgos relevantes</label>
+                <textarea name="hallazgosInteres" rows="4" style="width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; resize: vertical;" placeholder="Describa aquí cualquier hallazgo de interés clínico..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones al final -->
+    <div class="button-group">
+        <button class="button button-new" onclick="nuevoPaciente()">Nuevo Paciente</button>
+        <button class="button button-csv" onclick="exportToExcel()">Exportar Fila CSV</button>
+        <button class="button button-txt" onclick="generateReport()">Exportar TXT</button>
+    </div>
+
+    <!-- Div para el informe -->
+    <div id="informe"></div>
+
+    <script src="../materials_hs_valme/node_modules/jszip/dist/jszip.min.js"></script>
+    <script>
+        let analiticaActiva = false;
+        let medicinaActiva = false;
+
+        const IHS_REGIONS = [
+            { key: 'axila_d', label: 'Axilas(D)' },
+            { key: 'axila_i', label: 'Axilas(I)' },
+            { key: 'ingle_d', label: 'Ingles(D)' },
+            { key: 'ingle_i', label: 'Ingles(I)' },
+            { key: 'gluteo_d', label: 'Gluteo(D)' },
+            { key: 'gluteo_i', label: 'Gluteo(I)' },
+            { key: 'muslo_d', label: 'Muslos(D)' },
+            { key: 'muslo_i', label: 'Muslos(I)' },
+            { key: 'mama_d', label: 'Mamas(D)' },
+            { key: 'mama_i', label: 'Mamas(I)' },
+            { key: 'intermamaria', label: 'Intermamaria' },
+            { key: 'genital', label: 'Genital' },
+            { key: 'perianal', label: 'Perianal' },
+            { key: 'otras', label: 'Otras' }
+        ];
+
+        const IHS_LESION_TYPES = [
+            { key: 'n', shortLabel: 'N', className: 'nodulo' },
+            { key: 'a', shortLabel: 'A', className: 'absceso' },
+            { key: 'f', shortLabel: 'F', className: 'fistula' },
+            { key: 'fd', shortLabel: 'FD', className: 'fistula-drenante' }
+        ];
+
+        const SURGERY_FIELDS = [
+            { checkbox: 'cirugiaDermatologia', note: 'consideracionesDermatologia', label: 'Dermatologia' },
+            { checkbox: 'cirugiaGeneral', note: 'consideracionesGeneral', label: 'Cirugia General' },
+            { checkbox: 'cirugiaPlastica', note: 'consideracionesPlastica', label: 'Cirugia Plastica' },
+            { checkbox: 'cirugiaGinecologia', note: 'consideracionesGinecologia', label: 'Ginecologia' },
+            { checkbox: 'cirugiaUrologia', note: 'consideracionesUrologia', label: 'Urologia' }
+        ];
+
+        const DLQI_OPTION_SETS = {
+            standard: [
+                { label: 'Mucho', value: 3 },
+                { label: 'Bastante', value: 2 },
+                { label: 'Un poco', value: 1 },
+                { label: 'Nada', value: 0 }
+            ],
+            with_no_relation: [
+                { label: 'Mucho', value: 3 },
+                { label: 'Bastante', value: 2 },
+                { label: 'Un poco', value: 1 },
+                { label: 'Nada', value: 0 },
+                { label: 'Sin relacion', value: 0 }
+            ],
+            work_or_study_main: [
+                { label: 'Si', value: 'yes' },
+                { label: 'No', value: 'no' },
+                { label: 'Sin relacion', value: 'na' }
+            ],
+            work_or_study_followup: [
+                { label: 'Bastante', value: 2 },
+                { label: 'Un poco', value: 1 },
+                { label: 'Nada', value: 0 }
+            ]
+        };
+
+        const DLQI_ITEMS = [
+            {
+                text: '1. Durante los ultimos 7 dias, ¿ha sentido picor, dolor o escozor en la piel?',
+                optionSet: 'standard'
+            },
+            {
+                text: '2. Durante los ultimos 7 dias, ¿se ha sentido incomodo/a o cohibido/a debido a sus problemas de piel?',
+                optionSet: 'standard'
+            },
+            {
+                text: '3. Durante los ultimos 7 dias, ¿le han molestado sus problemas de piel para hacer la compra u ocuparse de la casa (o del jardin)?',
+                optionSet: 'with_no_relation'
+            },
+            {
+                text: '4. Durante los ultimos 7 dias, ¿han influido sus problemas de piel en la eleccion de la ropa que lleva?',
+                optionSet: 'with_no_relation'
+            },
+            {
+                text: '5. Durante los ultimos 7 dias, ¿han influido sus problemas de piel en cualquier actividad social o recreativa?',
+                optionSet: 'with_no_relation'
+            },
+            {
+                text: '6. Durante los ultimos 7 dias, ¿ha tenido dificultades para hacer deporte debido a sus problemas de piel?',
+                optionSet: 'with_no_relation'
+            },
+            {
+                text: '7. Durante los ultimos 7 dias, ¿sus problemas de piel le han impedido totalmente trabajar o estudiar?',
+                type: 'work_or_study_conditional',
+                optionSet: 'work_or_study_main',
+                followupOptionSet: 'work_or_study_followup'
+            },
+            {
+                text: '8. Durante los ultimos 7 dias, ¿han causado sus problemas de piel dificultades con su pareja o sus amigos y familiares?',
+                optionSet: 'with_no_relation'
+            },
+            {
+                text: '9. Durante los ultimos 7 dias, ¿han causado sus problemas de piel dificultades sexuales?',
+                optionSet: 'with_no_relation'
+            },
+            {
+                text: '10. Durante los ultimos 7 dias, ¿le ha causado problemas el tratamiento de la piel, por ejemplo ensuciandole la casa o quitandole tiempo?',
+                optionSet: 'with_no_relation'
+            }
+        ];
+
+        const HSQOL_ITEMS = [
+            { text: '1. La HS afecta a mi estado de animo.', reverse: false },
+            { text: '2. La HS empeora con el estres.', reverse: false },
+            { text: '3. Me he resignado a convivir con la HS.', reverse: false },
+            { text: '4. Me preocupa la poca eficacia del tratamiento.', reverse: false },
+            { text: '5. Me siento solo o aislado por la HS.', reverse: false },
+            { text: '6. Tener informacion sobre la HS me ayuda a aceptarla.', reverse: true },
+            { text: '7. La HS me ha llevado a pensar en hacerme dano o suicidarme.', reverse: false },
+            { text: '8. Me preocupa que alguno de mis hijos pueda tener HS.', reverse: false },
+            { text: '9. Me preocupa el mal olor causado por la HS.', reverse: false },
+            { text: '10. Evito hablar de mi HS.', reverse: false },
+            { text: '11. Me preocupa ser rechazado por mi HS.', reverse: false },
+            { text: '12. Me siento avergonzado por mi HS.', reverse: false },
+            { text: '13. Me preocupa el coste del tratamiento.', reverse: false },
+            { text: '14. La HS me dificulta realizar mi trabajo.', reverse: false },
+            { text: '15. Me preocupa perder mi empleo por la HS.', reverse: false },
+            { text: '16. La HS afecta a mis relaciones personales.', reverse: false },
+            { text: '17. Mi familia es mi principal apoyo frente a la HS.', reverse: true },
+            { text: '18. Me preocupa tener que renunciar a ciertas actividades por la HS.', reverse: false },
+            { text: '19. La HS supone un problema en mis relaciones intimas.', reverse: false },
+            { text: '20. El agua empeora mis lesiones.', reverse: false },
+            { text: '21. La HS afecta a mi sueno.', reverse: false },
+            { text: '22. Valoro positivamente las iniciativas para mejorar mi HS.', reverse: true },
+            { text: '23. A veces me resulta dificil seguir tratamientos y revisiones.', reverse: false },
+            { text: '24. Me preocupan los efectos adversos de los tratamientos.', reverse: false }
+        ];
+
+        const HSQOL_OPTIONS = [
+            { label: 'Nunca', value: 0 },
+            { label: 'Raramente', value: 1 },
+            { label: 'A veces', value: 2 },
+            { label: 'A menudo', value: 3 },
+            { label: 'Siempre', value: 4 }
+        ];
+
+        const THERAPY_GROUPS = [
+            {
+                key: 'topicos',
+                label: 'Topicos',
+                options: ['Clindamicina topica', 'Resorcinol']
+            },
+            {
+                key: 'antibioticos_orales',
+                label: 'Antibioticos orales',
+                options: ['Doxiciclina', 'Clindamicina oral', 'Rifampicina']
+            },
+            {
+                key: 'biologicos',
+                label: 'Biologicos',
+                options: ['Adalimumab', 'Secukinumab', 'Bimekizumab']
+            }
+        ];
+
+        const THERAPY_SLOT_LIMIT = 3;
+        const COMORBIDITY_FIELDS = [
+            { key: 'comorb_diabetes_tipo_ii', label: 'Diabetes tipo II' },
+            { key: 'comorb_hta', label: 'HTA' },
+            { key: 'comorb_dislipemia', label: 'Dislipemia' },
+            { key: 'comorb_enf_cardiovascular', label: 'Enf. Cardiovascular' },
+            { key: 'comorb_sindrome_metabolico', label: 'Sindrome metabolico' },
+            { key: 'comorb_esteatosis_hepatica', label: 'Esteatosis hepatica' },
+            { key: 'comorb_sinus_pilonidal', label: 'Sinus pilonidal' },
+            { key: 'comorb_colitis_ulcerosa', label: 'Colitis ulcerosa' },
+            { key: 'comorb_crohn', label: 'Enf. de Crohn' },
+            { key: 'comorb_artritis', label: 'Artritis' },
+            { key: 'comorb_psoriasis', label: 'Psoriasis' },
+            { key: 'comorb_sop', label: 'SOP' },
+            { key: 'comorb_acne', label: 'Acne' },
+            { key: 'comorb_depresion', label: 'Depresion' },
+            { key: 'comorb_ansiedad', label: 'Ansiedad' },
+            { key: 'comorb_pash_papash', label: 'PASH/PAPASH' },
+            { key: 'comorb_pioderma_gangrenoso', label: 'Pioderma gangrenoso' },
+            { key: 'comorb_foliculitis_decalvante', label: 'Foliculitis decalvante' }
+        ];
+
+        function buildTherapyFieldNames(prefix) {
+            const fields = [];
+            THERAPY_GROUPS.forEach(group => {
+                for (let i = 1; i <= THERAPY_SLOT_LIMIT; i += 1) {
+                    fields.push(`${prefix}_${group.key}_farmaco_${i}`);
+                    fields.push(`${prefix}_${group.key}_posologia_${i}`);
+                }
+                fields.push(`${prefix}_${group.key}_otros`);
+            });
+            return fields;
+        }
+
+        function buildHeadersHS() {
+            const headers = [
+                'nusha',
+                'fecha_visita',
+                'tipo_visita',
+                'consulta',
+                'hoja_destino',
+                'cie',
+                'origen_paciente',
+                'solicitud_analitica',
+                'solicitud_medicina_preventiva',
+                'antecedentes_familiares_hs',
+                'anio_inicio',
+                'fumador',
+                'cigarros_dia',
+                'anios_fumador',
+                'sexo_nacimiento',
+                'anio_diagnostico',
+                'peso_kg',
+                'talla_m',
+                'imc',
+                ...COMORBIDITY_FIELDS.map(item => item.key),
+                'otras_comorbilidades'
+            ];
+
+            IHS_REGIONS.forEach(region => {
+                headers.push(`ihs_${region.key}_n`);
+                headers.push(`ihs_${region.key}_a`);
+                headers.push(`ihs_${region.key}_f`);
+                headers.push(`ihs_${region.key}_fd`);
+            });
+
+            headers.push(
+                'otras_regiones',
+                'cicatrices',
+                'otras_lesiones',
+                'ihs_total_n',
+                'ihs_total_a',
+                'ihs_total_f',
+                'ihs_total_fd',
+                'ihs4_total',
+                'ihs4_gravedad',
+                'eco_nodulos',
+                'eco_abscesos',
+                'eco_fistulas',
+                'eco_ihs4',
+                'eco_gravedad',
+                'eco_doppler'
+            );
+
+            DLQI_ITEMS.forEach((_, index) => headers.push(`dlqi_q${index + 1}`));
+            headers.push('dlqi_total', 'dlqi_interpretacion');
+            HSQOL_ITEMS.forEach((_, index) => headers.push(`hsqol_q${index + 1}`));
+            headers.push('hsqol_total', 'hsqol_interpretacion', 'eva_dolor');
+
+            headers.push('cirugia_aplica');
+            SURGERY_FIELDS.forEach(field => {
+                headers.push(`${field.checkbox}`);
+                headers.push(`${field.note}`);
+            });
+
+            headers.push(...buildTherapyFieldNames('tx_primera'));
+            headers.push(...buildTherapyFieldNames('tx_seguimiento'));
+
+            headers.push(
+                'seguimiento_tratamiento_previo',
+                'seguimiento_tratamiento_actual',
+                'seguimiento_decision',
+                'seguimiento_adherencia',
+                'seguimiento_ajuste_pauta',
+                'seguimiento_morisky_q1',
+                'seguimiento_morisky_q2',
+                'seguimiento_morisky_q3',
+                'seguimiento_morisky_q4',
+                'seguimiento_morisky_resultado',
+                'seguimiento_motivo_cambio',
+                'seguimiento_efectos_adversos',
+                'otros_comentarios',
+                'hallazgos_interes'
+            );
+            return headers;
+        }
+
+        const HEADERS_HS = buildHeadersHS();
+        const HEADERS_HS_VERSION = 'v1';
+
+        const STORAGE_KEY = 'hs_valme_patient_store_v1';
+        const MORISKY_EXPECTED = ['no', 'si', 'no', 'no'];
+
+        let ihsCounts = createEmptyIhsCounts();
+        let therapyState = createEmptyTherapyState();
+        let seguimientoTherapyState = createEmptyTherapyState();
+        let seguimientoConcomitanteState = createEmptyConcomitanteState();
+        let seguimientoBaselineTherapyState = createEmptyTherapyState();
+        let previousVisitType = '';
+        let preloadedSnapshot = null;
+        let baseRows = [];
+        let baseFileName = '';
+
+        const baseStatus = document.getElementById('baseStatus');
+        const baseFileInput = document.getElementById('baseFileInput');
+        const loadBaseBtn = document.getElementById('loadBaseBtn');
+
+        document.addEventListener('DOMContentLoaded', function () {
+            setCurrentDate();
+            initSectionState();
+            renderIhsRegions();
+            renderDlqiQuestions();
+            renderHsqolQuestions();
+            renderTherapyGroups();
+            renderSeguimientoTherapyGroups();
+            renderSeguimientoConcomitanteGroups();
+            initSeguimientoEvents();
+            bindQuestionnaireAutoRecalc();
+            toggleCamposFumador();
+            actualizarOrigenPaciente();
+            recalculateQuestionnaires();
+            actualizarEvaDolor();
+            calcularIHS4Ecografico();
+            setBaseStatus('Sin base cargada en esta sesion.', false);
+        });
+
+        function createEmptyIhsCounts() {
+            const counts = {};
+            IHS_REGIONS.forEach(region => {
+                counts[region.key] = { n: 0, a: 0, f: 0, fd: 0 };
+            });
+            return counts;
+        }
+
+        function createEmptyTherapyState() {
+            const state = {};
+            THERAPY_GROUPS.forEach(group => {
+                state[group.key] = [{ drug: '', posology: '' }];
+            });
+            return state;
+        }
+
+        function createEmptyConcomitanteState() {
+            const state = {};
+            THERAPY_GROUPS.forEach(group => {
+                state[group.key] = [{ drug: '', posology: '' }];
+            });
+            return state;
+        }
+
+        function hasTherapyDataInRow(row, prefix) {
+            return buildTherapyFieldNames(prefix).some(key => flattenText(row[key]) !== '');
+        }
+
+        function parseTherapyOthers(raw) {
+            return String(raw || '')
+                .split('||')
+                .map(item => item.trim())
+                .filter(Boolean)
+                .map(item => {
+                    const idx = item.indexOf('|');
+                    if (idx < 0) return { drug: item, posology: '' };
+                    return { drug: item.slice(0, idx).trim(), posology: item.slice(idx + 1).trim() };
+                });
+        }
+
+        function therapyStateFromRow(row, prefix) {
+            const state = createEmptyTherapyState();
+            THERAPY_GROUPS.forEach(group => {
+                const entries = [];
+                for (let i = 1; i <= THERAPY_SLOT_LIMIT; i += 1) {
+                    const drug = flattenText(row[`${prefix}_${group.key}_farmaco_${i}`]);
+                    const posology = flattenText(row[`${prefix}_${group.key}_posologia_${i}`]);
+                    if (drug || posology) entries.push({ drug, posology });
+                }
+                parseTherapyOthers(row[`${prefix}_${group.key}_otros`]).forEach(entry => {
+                    if (entry.drug || entry.posology) entries.push(entry);
+                });
+                state[group.key] = entries.length ? entries : [{ drug: '', posology: '' }];
+            });
+            return state;
+        }
+
+        function flattenTherapyState(state) {
+            const rows = [];
+            THERAPY_GROUPS.forEach(group => {
+                (state[group.key] || []).forEach(entry => {
+                    const drug = flattenText(entry.drug);
+                    const posology = flattenText(entry.posology);
+                    if (drug || posology) rows.push({ group: group.key, drug, posology });
+                });
+            });
+            return rows;
+        }
+
+        function initSeguimientoEvents() {
+            const nushaInput = document.querySelector('input[name="nusha"]');
+            if (loadBaseBtn && baseFileInput) {
+                loadBaseBtn.addEventListener('click', () => baseFileInput.click());
+                baseFileInput.addEventListener('change', async () => {
+                    const file = baseFileInput.files?.[0];
+                    if (!file) return;
+                    try {
+                        await loadBaseFromFile(file);
+                    } catch (error) {
+                        setBaseStatus('Error al cargar archivo de base (Excel/CSV).', false);
+                    }
+                });
+            }
+            if (nushaInput) {
+                nushaInput.addEventListener('change', () => {
+                    if (isFollowupVisit()) {
+                        loadFollowupPreload();
+                    }
+                });
+                nushaInput.addEventListener('blur', () => {
+                    if (isFollowupVisit()) {
+                        loadFollowupPreload();
+                    }
+                });
+            }
+        }
+
+        function bindQuestionnaireAutoRecalc() {
+            document.addEventListener('click', (event) => {
+                const target = event.target;
+                if (!(target instanceof Element)) return;
+                if (target.classList.contains('answer-option')) {
+                    recalculateQuestionnaires();
+                }
+            });
+            document.addEventListener('change', (event) => {
+                const target = event.target;
+                if (!(target instanceof Element)) return;
+                if (target.matches('#seguimientoAdherencia')) {
+                    recalculateQuestionnaires();
+                }
+            });
+        }
+
+        function setCurrentDate() {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('fechaActual').value = formattedDate;
+        }
+
+        function initSectionState() {
+            document.querySelectorAll('.section-header').forEach(header => {
+                header.classList.add('collapsed');
+            });
+        }
+
+        function toggleSection(id) {
+            const content = document.getElementById(id);
+            if (!content) return;
+            const wrapper = content.closest('.section');
+            if (wrapper && wrapper.classList.contains('section-hidden')) return;
+            const header = content.previousElementSibling;
+            const willOpen = !content.classList.contains('active');
+            content.classList.toggle('active', willOpen);
+            header.classList.toggle('collapsed', !willOpen);
+        }
+
+        function toggleAnalytica() {
+            analiticaActiva = !analiticaActiva;
+            document.getElementById('analiticaBtn').classList.toggle('active', analiticaActiva);
+        }
+
+        function toggleMedicina() {
+            medicinaActiva = !medicinaActiva;
+            document.getElementById('medicinaBtn').classList.toggle('active', medicinaActiva);
+        }
+
+        function actualizarOrigenPaciente() {
+            const tipoVisita = getFieldValue('select[name="tipoVisita"]');
+            const consulta = getFieldValue('select[name="consulta"]');
+            const origenPaciente = document.querySelector('select[name="origenPaciente"]');
+            if (tipoVisita === 'seguimiento' && consulta && origenPaciente) {
+                origenPaciente.value = consulta;
+            }
+            actualizarSeccionesCondicionales();
+            actualizarModoVisita();
+        }
+
+        function actualizarSeccionesCondicionales() {
+            const section = document.getElementById('cirugiaSection');
+            if (!section) return;
+            section.classList.remove('section-hidden');
+        }
+
+        function limpiarCirugia() {
+            SURGERY_FIELDS.forEach(field => {
+                const checkbox = document.querySelector(`input[name="${field.checkbox}"]`);
+                const note = document.querySelector(`input[name="${field.note}"]`);
+                if (checkbox) checkbox.checked = false;
+                if (note) note.value = '';
+            });
+            const content = document.getElementById('cirugia');
+            if (content) {
+                content.classList.remove('active');
+                const header = content.previousElementSibling;
+                if (header) header.classList.add('collapsed');
+            }
+        }
+
+        function isFollowupVisit() {
+            return getFieldValue('select[name="tipoVisita"]') === 'seguimiento';
+        }
+
+        function actualizarModoVisita() {
+            const tipoVisita = getFieldValue('select[name="tipoVisita"]');
+            const isFollowup = tipoVisita === 'seguimiento';
+
+            const primeraBlock = document.getElementById('farmacoPrimeraBlock');
+            const seguimientoBlock = document.getElementById('farmacoSeguimientoBlock');
+            if (primeraBlock) primeraBlock.classList.toggle('hidden', isFollowup);
+            if (seguimientoBlock) seguimientoBlock.classList.toggle('hidden', !isFollowup);
+
+            if (isFollowup && previousVisitType !== 'seguimiento') {
+                resetSectionsForFollowup();
+                resetSeguimientoFarmaco();
+                loadFollowupPreload();
+            }
+
+            if (!isFollowup) {
+                hideFollowupPreloadCard();
+            }
+
+            previousVisitType = tipoVisita;
+        }
+
+        function resetSectionsForFollowup() {
+            resetRegionesSection();
+            resetEcografiaSection();
+            resetPromsSection();
+        }
+
+        function resetRegionesSection() {
+            ihsCounts = createEmptyIhsCounts();
+            renderIhsRegions();
+            setFieldValue('#otrasRegiones', '');
+            setFieldValue('#cicatrices', '');
+            setFieldValue('#otrasLesiones', '');
+        }
+
+        function resetEcografiaSection() {
+            setFieldValue('#nodulosEco', '');
+            setFieldValue('#abscesosEco', '');
+            setFieldValue('#fistulasEco', '');
+            document.querySelectorAll('input[name="doppler"]').forEach(input => { input.checked = false; });
+            calcularIHS4Ecografico();
+        }
+
+        function resetPromsSection() {
+            renderDlqiQuestions();
+            renderHsqolQuestions();
+            setFieldValue('#evaDolor', '');
+            recalculateQuestionnaires();
+            actualizarEvaDolor();
+        }
+
+        function setSeguimientoDecision(decision) {
+            const hidden = document.getElementById('seguimientoDecision');
+            if (hidden) hidden.value = decision;
+
+            const continuarBtn = document.getElementById('seguimientoContinuarBtn');
+            const cambiarBtn = document.getElementById('seguimientoCambiarBtn');
+            if (continuarBtn) continuarBtn.classList.toggle('active', decision === 'continuar');
+            if (cambiarBtn) cambiarBtn.classList.toggle('active', decision === 'cambiar');
+
+            const continuarPanel = document.getElementById('seguimientoContinuarPanel');
+            const cambiarPanel = document.getElementById('seguimientoCambiarPanel');
+            if (continuarPanel) continuarPanel.classList.toggle('hidden', decision !== 'continuar');
+            if (cambiarPanel) cambiarPanel.classList.toggle('hidden', decision !== 'cambiar');
+        }
+
+        function resetSeguimientoFarmaco() {
+            setSeguimientoDecision('');
+            setFieldValue('#seguimientoAdherencia', '');
+            setFieldValue('#seguimientoAjuste', '');
+            setFieldValue('#seguimientoMotivoCambio', '');
+            const ea = document.getElementById('seguimientoEfectosAdversos');
+            if (ea) ea.checked = false;
+
+            for (let i = 0; i < 4; i += 1) {
+                const input = document.getElementById(`morisky-${i}`);
+                if (input) input.value = '';
+            }
+            document.querySelectorAll('.morisky-grid .answer-option.active').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            recalculateQuestionnaires();
+
+            seguimientoTherapyState = createEmptyTherapyState();
+            renderSeguimientoTherapyGroups();
+            seguimientoConcomitanteState = createEmptyConcomitanteState();
+            renderSeguimientoConcomitanteGroups();
+            seguimientoBaselineTherapyState = createEmptyTherapyState();
+            setFieldValue('#seguimientoTratamientoActual', '');
+        }
+
+        function setMoriskyAnswer(index, value, button) {
+            const row = button.closest('.morisky-row');
+            if (!row) return;
+            row.querySelectorAll('.answer-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            button.classList.add('active');
+            const input = document.getElementById(`morisky-${index}`);
+            if (input) input.value = value;
+            recalculateQuestionnaires();
+        }
+
+        function updateMoriskyResult() {
+            const resultEl = document.getElementById('moriskyResultado');
+            if (!resultEl) return;
+            const answers = MORISKY_EXPECTED.map((_, index) => getFieldValue(`#morisky-${index}`));
+            if (answers.some(answer => !answer)) {
+                resultEl.textContent = 'Cuestionario incompleto';
+                return;
+            }
+            const adherente = answers.every((answer, index) => answer === MORISKY_EXPECTED[index]);
+            resultEl.textContent = adherente ? 'Morisky-Green: adherente' : 'Morisky-Green: no adherente';
+        }
+
+        function getMoriskyResult() {
+            const answers = MORISKY_EXPECTED.map((_, index) => getFieldValue(`#morisky-${index}`));
+            if (answers.some(answer => !answer)) {
+                return { status: 'incompleto', answers };
+            }
+            const adherente = answers.every((answer, index) => answer === MORISKY_EXPECTED[index]);
+            return { status: adherente ? 'adherente' : 'no_adherente', answers };
+        }
+
+        function renderSeguimientoTherapyGroups() {
+            THERAPY_GROUPS.forEach(group => {
+                renderSeguimientoTherapyGroup(group.key);
+            });
+        }
+
+        function renderSeguimientoTherapyGroup(groupKey) {
+            const group = THERAPY_GROUPS.find(item => item.key === groupKey);
+            const container = document.getElementById(`followup-therapy-${groupKey}`);
+            if (!group || !container) return;
+            container.innerHTML = seguimientoTherapyState[groupKey].map((entry, index) => {
+                const options = group.options.map(option => {
+                    const selected = option === entry.drug ? ' selected' : '';
+                    return `<option value="${escapeHtml(option)}"${selected}>${escapeHtml(option)}</option>`;
+                }).join('');
+                return `
+                    <div class="therapy-row">
+                        <select onchange="updateSeguimientoTherapyField('${groupKey}', ${index}, 'drug', this.value)">
+                            <option value="">Seleccione tratamiento</option>
+                            ${options}
+                        </select>
+                        <input
+                            type="text"
+                            placeholder="Dosis / frecuencia"
+                            value="${escapeHtml(entry.posology)}"
+                            oninput="updateSeguimientoTherapyField('${groupKey}', ${index}, 'posology', this.value)"
+                        >
+                        <div class="therapy-actions">
+                            <button type="button" class="therapy-action add" onclick="addSeguimientoTherapyRow('${groupKey}')" aria-label="Anadir linea">+</button>
+                            ${index > 0 ? `<button type="button" class="therapy-action remove" onclick="removeSeguimientoTherapyRow('${groupKey}', ${index})" aria-label="Eliminar linea">-</button>` : '<span class="therapy-action-placeholder"></span>'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateSeguimientoTherapyField(groupKey, index, field, value) {
+            if (!seguimientoTherapyState[groupKey] || !seguimientoTherapyState[groupKey][index]) return;
+            seguimientoTherapyState[groupKey][index][field] = value;
+        }
+
+        function addSeguimientoTherapyRow(groupKey) {
+            if (!seguimientoTherapyState[groupKey]) return;
+            seguimientoTherapyState[groupKey].push({ drug: '', posology: '' });
+            renderSeguimientoTherapyGroup(groupKey);
+        }
+
+        function removeSeguimientoTherapyRow(groupKey, index) {
+            if (!seguimientoTherapyState[groupKey] || index <= 0) return;
+            seguimientoTherapyState[groupKey].splice(index, 1);
+            if (!seguimientoTherapyState[groupKey].length) {
+                seguimientoTherapyState[groupKey].push({ drug: '', posology: '' });
+            }
+            renderSeguimientoTherapyGroup(groupKey);
+        }
+
+        function getSeguimientoTherapySelections() {
+            const selections = {};
+            THERAPY_GROUPS.forEach(group => {
+                selections[group.key] = seguimientoTherapyState[group.key]
+                    .map(entry => ({
+                        drug: flattenText(entry.drug),
+                        posology: flattenText(entry.posology)
+                    }))
+                    .filter(entry => entry.drug || entry.posology);
+            });
+            return selections;
+        }
+
+        function renderSeguimientoConcomitanteGroups() {
+            THERAPY_GROUPS.forEach(group => {
+                renderSeguimientoConcomitanteGroup(group.key);
+            });
+        }
+
+        function renderSeguimientoConcomitanteGroup(groupKey) {
+            const group = THERAPY_GROUPS.find(item => item.key === groupKey);
+            const container = document.getElementById(`followup-concomitante-${groupKey}`);
+            if (!group || !container) return;
+            container.innerHTML = seguimientoConcomitanteState[groupKey].map((entry, index) => {
+                const options = group.options.map(option => {
+                    const selected = option === entry.drug ? ' selected' : '';
+                    return `<option value="${escapeHtml(option)}"${selected}>${escapeHtml(option)}</option>`;
+                }).join('');
+                return `
+                    <div class="therapy-row">
+                        <select onchange="updateSeguimientoConcomitanteField('${groupKey}', ${index}, 'drug', this.value)">
+                            <option value="">Seleccione tratamiento</option>
+                            ${options}
+                        </select>
+                        <input
+                            type="text"
+                            placeholder="Dosis / frecuencia"
+                            value="${escapeHtml(entry.posology)}"
+                            oninput="updateSeguimientoConcomitanteField('${groupKey}', ${index}, 'posology', this.value)"
+                        >
+                        <div class="therapy-actions">
+                            <button type="button" class="therapy-action add" onclick="addSeguimientoConcomitanteRow('${groupKey}')" aria-label="Anadir linea">+</button>
+                            ${index > 0 ? `<button type="button" class="therapy-action remove" onclick="removeSeguimientoConcomitanteRow('${groupKey}', ${index})" aria-label="Eliminar linea">-</button>` : '<span class="therapy-action-placeholder"></span>'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateSeguimientoConcomitanteField(groupKey, index, field, value) {
+            if (!seguimientoConcomitanteState[groupKey] || !seguimientoConcomitanteState[groupKey][index]) return;
+            seguimientoConcomitanteState[groupKey][index][field] = value;
+        }
+
+        function addSeguimientoConcomitanteRow(groupKey) {
+            if (!seguimientoConcomitanteState[groupKey]) return;
+            seguimientoConcomitanteState[groupKey].push({ drug: '', posology: '' });
+            renderSeguimientoConcomitanteGroup(groupKey);
+        }
+
+        function removeSeguimientoConcomitanteRow(groupKey, index) {
+            if (!seguimientoConcomitanteState[groupKey] || index <= 0) return;
+            seguimientoConcomitanteState[groupKey].splice(index, 1);
+            if (!seguimientoConcomitanteState[groupKey].length) {
+                seguimientoConcomitanteState[groupKey].push({ drug: '', posology: '' });
+            }
+            renderSeguimientoConcomitanteGroup(groupKey);
+        }
+
+        function getSeguimientoConcomitanteSelections() {
+            const selections = {};
+            THERAPY_GROUPS.forEach(group => {
+                selections[group.key] = seguimientoConcomitanteState[group.key]
+                    .map(entry => ({
+                        drug: flattenText(entry.drug),
+                        posology: flattenText(entry.posology)
+                    }))
+                    .filter(entry => entry.drug || entry.posology);
+            });
+            return selections;
+        }
+
+        function setBaseStatus(text, ok) {
+            if (!baseStatus) return;
+            baseStatus.textContent = text;
+            baseStatus.classList.toggle('ok', !!ok);
+        }
+
+        function detectCsvDelimiter(csv) {
+            const firstLine = String(csv || '').split(/\r?\n/).find(line => line.trim() !== '') || '';
+            let inQuotes = false;
+            let commas = 0;
+            let semicolons = 0;
+            for (let i = 0; i < firstLine.length; i += 1) {
+                const c = firstLine[i];
+                const next = firstLine[i + 1];
+                if (c === '"') {
+                    if (inQuotes && next === '"') {
+                        i += 1;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                    continue;
+                }
+                if (!inQuotes) {
+                    if (c === ',') commas += 1;
+                    if (c === ';') semicolons += 1;
+                }
+            }
+            return semicolons > commas ? ';' : ',';
+        }
+
+        function parseCsv(csv) {
+            const delimiter = detectCsvDelimiter(csv);
+            const rows = [];
+            let row = [];
+            let value = '';
+            let inQuotes = false;
+            for (let i = 0; i < csv.length; i += 1) {
+                const c = csv[i];
+                const next = csv[i + 1];
+                if (c === '"') {
+                    if (inQuotes && next === '"') {
+                        value += '"';
+                        i += 1;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                    continue;
+                }
+                if (c === delimiter && !inQuotes) {
+                    row.push(value);
+                    value = '';
+                    continue;
+                }
+                if ((c === '\n' || c === '\r') && !inQuotes) {
+                    if (c === '\r' && next === '\n') i += 1;
+                    row.push(value);
+                    if (row.length > 1 || row[0] !== '') rows.push(row);
+                    row = [];
+                    value = '';
+                    continue;
+                }
+                value += c;
+            }
+            row.push(value);
+            if (row.length > 1 || row[0] !== '') rows.push(row);
+            return rows;
+        }
+
+        function columnRefToIndex(ref) {
+            let idx = 0;
+            const letters = String(ref || '').replace(/[^A-Z]/gi, '').toUpperCase();
+            for (let i = 0; i < letters.length; i += 1) {
+                idx = idx * 26 + (letters.charCodeAt(i) - 64);
+            }
+            return Math.max(0, idx - 1);
+        }
+
+        async function parseXlsx(file) {
+            if (typeof JSZip === 'undefined') {
+                throw new Error('JSZip no disponible para lectura XLSX');
+            }
+            const buffer = await file.arrayBuffer();
+            const zip = await JSZip.loadAsync(buffer);
+
+            const workbookXml = await zip.file('xl/workbook.xml')?.async('text');
+            const relsXml = await zip.file('xl/_rels/workbook.xml.rels')?.async('text');
+            if (!workbookXml || !relsXml) throw new Error('XLSX invalido');
+
+            const parser = new DOMParser();
+            const workbookDoc = parser.parseFromString(workbookXml, 'application/xml');
+            const relsDoc = parser.parseFromString(relsXml, 'application/xml');
+
+            const relMap = {};
+            Array.from(relsDoc.getElementsByTagName('Relationship')).forEach(rel => {
+                relMap[rel.getAttribute('Id')] = rel.getAttribute('Target');
+            });
+
+            let sharedStrings = [];
+            const sharedXml = await zip.file('xl/sharedStrings.xml')?.async('text');
+            if (sharedXml) {
+                const sharedDoc = parser.parseFromString(sharedXml, 'application/xml');
+                sharedStrings = Array.from(sharedDoc.getElementsByTagName('si')).map(si => {
+                    return Array.from(si.getElementsByTagName('t')).map(t => t.textContent || '').join('');
+                });
+            }
+
+            const sheetNodes = Array.from(workbookDoc.getElementsByTagName('sheet'));
+            const sheets = [];
+
+            for (let i = 0; i < sheetNodes.length; i += 1) {
+                const sheet = sheetNodes[i];
+                const sheetName = sheet.getAttribute('name') || `Hoja_${i + 1}`;
+                const relId = sheet.getAttribute('r:id') || sheet.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'id');
+                if (!relId || !relMap[relId]) continue;
+                let sheetPath = relMap[relId];
+                if (sheetPath.startsWith('/')) {
+                    sheetPath = sheetPath.replace(/^\/+/, '');
+                } else {
+                    sheetPath = `xl/${sheetPath}`;
+                }
+                const sheetXml = await zip.file(sheetPath)?.async('text');
+                if (!sheetXml) continue;
+                const sheetDoc = parser.parseFromString(sheetXml, 'application/xml');
+                const rowNodes = Array.from(sheetDoc.getElementsByTagName('row'));
+                const matrix = rowNodes.map(rowNode => {
+                    const row = [];
+                    Array.from(rowNode.getElementsByTagName('c')).forEach(cell => {
+                        const ref = cell.getAttribute('r') || '';
+                        const colIndex = columnRefToIndex(ref);
+                        const type = cell.getAttribute('t') || '';
+                        let value = '';
+                        if (type === 'inlineStr') {
+                            value = Array.from(cell.getElementsByTagName('t')).map(t => t.textContent || '').join('');
+                        } else {
+                            const raw = cell.getElementsByTagName('v')[0]?.textContent || '';
+                            value = type === 's' ? (sharedStrings[Number(raw)] ?? '') : raw;
+                        }
+                        row[colIndex] = value;
+                    });
+                    return row;
+                }).filter(row => row.some(cell => String(cell || '').trim() !== ''));
+                sheets.push({ name: sheetName, matrix });
+            }
+            return sheets;
+        }
+
+        function normalizeId(value) {
+            return flattenText(value).toUpperCase();
+        }
+
+        function parseDateToTs(value) {
+            if (!value) return Number.NaN;
+            const d = new Date(value);
+            return Number.isNaN(d.getTime()) ? Number.NaN : d.getTime();
+        }
+
+        function getLatestVisitRow(id, currentDate) {
+            const candidates = baseRows.filter(row => row.__id === id);
+            if (!candidates.length) return null;
+            const currentTs = parseDateToTs(currentDate);
+            let scoped = candidates;
+            if (!Number.isNaN(currentTs)) {
+                const previous = candidates.filter(row => {
+                    const ts = parseDateToTs(row.fecha_visita || row.fecha);
+                    return !Number.isNaN(ts) && ts < currentTs;
+                });
+                if (previous.length) scoped = previous;
+            }
+            scoped.sort((a, b) => {
+                const ta = parseDateToTs(a.fecha_visita || a.fecha);
+                const tb = parseDateToTs(b.fecha_visita || b.fecha);
+                if (Number.isNaN(ta) && Number.isNaN(tb)) return b.__index - a.__index;
+                if (Number.isNaN(ta)) return 1;
+                if (Number.isNaN(tb)) return -1;
+                return tb - ta;
+            });
+            return scoped[0] || null;
+        }
+
+        async function loadBaseFromFile(file) {
+            const isXlsx = /\.xlsx$/i.test(file.name) || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+            let matrices = [];
+            if (isXlsx) {
+                const parsedSheets = await parseXlsx(file);
+                matrices = parsedSheets
+                    .filter(item => item.matrix.length)
+                    .map(item => ({ sheetName: item.name, matrix: item.matrix }));
+            } else {
+                const matrix = parseCsv(await file.text());
+                matrices = [{ sheetName: 'CSV', matrix }];
+            }
+
+            const allRows = [];
+            matrices.forEach(item => {
+                const matrix = item.matrix;
+                if (!matrix.length) return;
+                const header = matrix[0].map(h => flattenText(h));
+                matrix.slice(1).forEach((cells, index) => {
+                    const row = {};
+                    header.forEach((key, colIndex) => {
+                        row[key] = flattenText(cells[colIndex] || '');
+                    });
+                    const nusha = row.nusha || row.NUSHA || row.nhc || row.NHC || '';
+                    const normalized = normalizeId(nusha);
+                    if (!normalized) return;
+                    row.__id = normalized;
+                    row.__sheet = item.sheetName;
+                    row.__index = index;
+                    allRows.push(row);
+                });
+            });
+
+            baseRows = allRows;
+            baseFileName = file.name;
+            if (!baseRows.length) {
+                setBaseStatus('Base vacia o invalida.', false);
+                return;
+            }
+            setBaseStatus(`Base cargada: ${baseFileName} (${baseRows.length} filas).`, true);
+            if (isFollowupVisit()) {
+                loadFollowupPreload();
+            }
+        }
+
+        function readPatientStore() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                return raw ? JSON.parse(raw) : {};
+            } catch (error) {
+                return {};
+            }
+        }
+
+        function writePatientStore(store) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+            } catch (error) {
+                // Si el navegador bloquea almacenamiento, continuamos sin persistencia local.
+            }
+        }
+
+        function loadFollowupPreload() {
+            if (!isFollowupVisit()) return;
+            const nusha = normalizeId(getFieldValue('input[name="nusha"]'));
+            if (!nusha) {
+                if (preloadedSnapshot) {
+                    clearStableSections();
+                }
+                hideFollowupPreloadCard();
+                return;
+            }
+            if (baseRows.length) {
+                const row = getLatestVisitRow(nusha, getFieldValue('input[name="fecha"]'));
+                if (row) {
+                    preloadedSnapshot = row;
+                    applyFollowupPreload(row);
+                    setBaseStatus(`Base cargada: ${baseFileName} (${baseRows.length} filas). NUSHA encontrado y precargado.`, true);
+                    return;
+                }
+                setBaseStatus(`Base cargada: ${baseFileName} (${baseRows.length} filas). NUSHA no encontrado.`, false);
+            }
+            const store = readPatientStore();
+            const snapshot = store[nusha];
+            if (!snapshot) {
+                if (preloadedSnapshot) {
+                    clearStableSections();
+                }
+                hideFollowupPreloadCard();
+                return;
+            }
+            preloadedSnapshot = snapshot;
+            applyFollowupPreload(snapshot);
+        }
+
+        function buildTreatmentSummaryFromState(state) {
+            const lines = [];
+            THERAPY_GROUPS.forEach(group => {
+                const entries = (state[group.key] || [])
+                    .map(entry => {
+                        const drug = flattenText(entry.drug);
+                        const posology = flattenText(entry.posology);
+                        if (!drug && !posology) return '';
+                        return posology ? `${drug} (${posology})` : drug;
+                    })
+                    .filter(Boolean);
+                if (entries.length) lines.push(`${group.label}: ${entries.join('; ')}`);
+            });
+            return lines.join(' | ');
+        }
+
+        function isTruthyValue(value) {
+            const normalized = flattenText(value).toLowerCase();
+            return normalized === '1' || normalized === 'si' || normalized === 'sí' || normalized === 'true' || normalized === 'yes';
+        }
+
+        function applyComorbSnapshotByKeys(row) {
+            const activeSet = new Set(
+                COMORBIDITY_FIELDS
+                    .filter(item => isTruthyValue(row[item.key]))
+                    .map(item => item.key)
+            );
+            document.querySelectorAll('.comorbilidad-item').forEach(item => {
+                const key = item.getAttribute('data-comorb-key') || '';
+                item.classList.toggle('active', activeSet.has(key));
+            });
+            setFieldValue('textarea[name="otrasComorbilidades"]', row.otras_comorbilidades || row.otrasComorbilidades || '');
+        }
+
+        function applyFollowupPreload(snapshot) {
+            const textEl = document.getElementById('seguimientoTratamientoPrevioTexto');
+            const card = document.getElementById('seguimientoPreloadCard');
+            const currentTx = document.getElementById('seguimientoTratamientoActual');
+            let treatment = '';
+
+            if (snapshot && snapshot.__id) {
+                const baselineState = hasTherapyDataInRow(snapshot, 'tx_seguimiento')
+                    ? therapyStateFromRow(snapshot, 'tx_seguimiento')
+                    : hasTherapyDataInRow(snapshot, 'tx_primera')
+                        ? therapyStateFromRow(snapshot, 'tx_primera')
+                        : createEmptyTherapyState();
+
+                seguimientoBaselineTherapyState = baselineState;
+                treatment = buildTreatmentSummaryFromState(baselineState)
+                    || flattenText(snapshot.seguimiento_tratamiento_actual || snapshot.seguimiento_tratamiento_previo || snapshot.treatmentSummary || '');
+
+                applyAnamnesisSnapshot({
+                    antecedentes: snapshot.antecedentes_familiares_hs || snapshot.antecedentes || '',
+                    anioInicio: snapshot.anio_inicio || snapshot.anioInicio || '',
+                    fumador: snapshot.fumador || '',
+                    cigarros: snapshot.cigarros_dia || snapshot.cigarros || '',
+                    aniosFumador: snapshot.anios_fumador || snapshot.aniosFumador || '',
+                    sexo: snapshot.sexo_nacimiento || snapshot.sexo || '',
+                    anioDiagnostico: snapshot.anio_diagnostico || snapshot.anioDiagnostico || '',
+                    peso: snapshot.peso_kg || snapshot.peso || '',
+                    talla: snapshot.talla_m || snapshot.talla || '',
+                    imc: snapshot.imc || ''
+                });
+                applyComorbSnapshotByKeys(snapshot);
+            } else {
+                seguimientoBaselineTherapyState = createEmptyTherapyState();
+                treatment = flattenText(snapshot.treatmentSummary || '');
+                if (snapshot.anamnesis) {
+                    applyAnamnesisSnapshot(snapshot.anamnesis);
+                }
+                if (snapshot.comorbilidades) {
+                    applyComorbSnapshot(snapshot.comorbilidades);
+                }
+            }
+
+            if (card) card.classList.toggle('hidden', !treatment);
+            if (textEl) textEl.textContent = treatment || '';
+            if (currentTx) currentTx.value = treatment || '';
+        }
+
+        function hideFollowupPreloadCard() {
+            preloadedSnapshot = null;
+            seguimientoBaselineTherapyState = createEmptyTherapyState();
+            const card = document.getElementById('seguimientoPreloadCard');
+            const textEl = document.getElementById('seguimientoTratamientoPrevioTexto');
+            const currentTx = document.getElementById('seguimientoTratamientoActual');
+            if (card) card.classList.add('hidden');
+            if (textEl) textEl.textContent = '';
+            if (currentTx) currentTx.value = '';
+        }
+
+        function clearStableSections() {
+            setRadioValue('antecedentes', '');
+            setFieldValue('input[name="anioInicio"]', '');
+            setRadioValue('fumador', '');
+            setFieldValue('input[name="cigarros"]', '');
+            setFieldValue('input[name="aniosFumador"]', '');
+            setRadioValue('sexo', '');
+            setFieldValue('input[name="anioDiagnostico"]', '');
+            setFieldValue('input[name="peso"]', '');
+            setFieldValue('input[name="talla"]', '');
+            setFieldValue('input[name="imc"]', '');
+            document.querySelectorAll('.comorbilidad-item.active').forEach(item => item.classList.remove('active'));
+            setFieldValue('textarea[name="otrasComorbilidades"]', '');
+            toggleCamposFumador();
+        }
+
+        function applyAnamnesisSnapshot(data) {
+            setRadioValue('antecedentes', data.antecedentes || '');
+            setFieldValue('input[name="anioInicio"]', data.anioInicio || '');
+            setRadioValue('fumador', data.fumador || '');
+            setFieldValue('input[name="cigarros"]', data.cigarros || '');
+            setFieldValue('input[name="aniosFumador"]', data.aniosFumador || '');
+            setRadioValue('sexo', data.sexo || '');
+            setFieldValue('input[name="anioDiagnostico"]', data.anioDiagnostico || '');
+            setFieldValue('input[name="peso"]', data.peso || '');
+            setFieldValue('input[name="talla"]', data.talla || '');
+            setFieldValue('input[name="imc"]', data.imc || '');
+            toggleCamposFumador();
+        }
+
+        function applyComorbSnapshot(data) {
+            const activeSet = new Set((data.active || []).map(item => flattenText(item)));
+            document.querySelectorAll('.comorbilidad-item').forEach(item => {
+                const label = flattenText(item.textContent);
+                const key = flattenText(item.getAttribute('data-comorb-key'));
+                item.classList.toggle('active', activeSet.has(label) || activeSet.has(key));
+            });
+            setFieldValue('textarea[name="otrasComorbilidades"]', data.otras || '');
+        }
+
+        function toggleCamposFumador() {
+            const fumadorChecked = document.querySelector('input[name="fumador"]:checked');
+            const esFumador = fumadorChecked && fumadorChecked.value === 'si';
+            const cigarrosDia = document.getElementById('cigarrosDia');
+            const aniosFumador = document.getElementById('aniosFumador');
+            if (!cigarrosDia || !aniosFumador) return;
+
+            cigarrosDia.classList.toggle('hidden', !esFumador);
+
+            if (!esFumador) {
+                aniosFumador.classList.add('hidden');
+                setFieldValue('input[name="cigarros"]', '');
+                setFieldValue('input[name="aniosFumador"]', '');
+                return;
+            }
+
+            const cigarros = parseInt(getFieldValue('input[name="cigarros"]'), 10) || 0;
+            aniosFumador.classList.toggle('hidden', cigarros <= 0);
+        }
+
+        function validarAnio(input) {
+            const valor = parseInt(input.value, 10);
+            const errorMessage = input.nextElementSibling;
+            if (valor < 1900 || valor > 2100) {
+                if (errorMessage) errorMessage.style.display = 'block';
+                input.value = '';
+            } else if (errorMessage) {
+                errorMessage.style.display = 'none';
+            }
+        }
+
+        function validarCigarros(input) {
+            const valor = parseInt(input.value, 10);
+            const errorMessage = input.nextElementSibling;
+            const aniosFumador = document.getElementById('aniosFumador');
+
+            if (valor < 0 || valor > 50) {
+                if (errorMessage) errorMessage.style.display = 'block';
+                input.value = '';
+                if (aniosFumador) aniosFumador.classList.add('hidden');
+            } else {
+                if (errorMessage) errorMessage.style.display = 'none';
+                if (aniosFumador) aniosFumador.classList.toggle('hidden', !(valor > 0));
+            }
+        }
+
+        function validarAniosFumador(input) {
+            const valor = parseInt(input.value, 10);
+            const errorMessage = input.nextElementSibling;
+            if (valor < 0 || valor > 100) {
+                if (errorMessage) errorMessage.style.display = 'block';
+                input.value = '';
+            } else if (errorMessage) {
+                errorMessage.style.display = 'none';
+            }
+        }
+
+        function calcularIMC() {
+            const peso = parseFloat(getFieldValue('input[name="peso"]'));
+            const talla = parseFloat(getFieldValue('input[name="talla"]'));
+            if (peso && talla) {
+                setFieldValue('input[name="imc"]', (peso / (talla * talla)).toFixed(2));
+            } else {
+                setFieldValue('input[name="imc"]', '');
+            }
+        }
+
+        function renderIhsRegions() {
+            const container = document.getElementById('ihsRegionGrid');
+            if (!container) return;
+            const html = IHS_REGIONS.map(region => {
+                return `
+                    <div class="region-card">
+                        <div class="region-title">${region.label}</div>
+                        ${IHS_LESION_TYPES.map(type => renderCounterRow(region.key, type.key, type.shortLabel, type.className)).join('')}
+                    </div>
+                `;
+            }).join('');
+            container.innerHTML = html;
+            actualizarIHS4();
+        }
+
+        function renderCounterRow(regionKey, lesionKey, shortLabel, className) {
+            return `
+                <div class="counter-row">
+                    <span class="counter-label ${className}">${shortLabel}</span>
+                    <div class="counter-ctl">
+                        <button type="button" class="counter-btn" onclick="updateRegionCount('${regionKey}', '${lesionKey}', -1)">-</button>
+                        <span class="counter-value" id="ihs-${regionKey}-${lesionKey}">0</span>
+                        <button type="button" class="counter-btn" onclick="updateRegionCount('${regionKey}', '${lesionKey}', 1)">+</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateRegionCount(regionKey, lesionKey, delta) {
+            const region = ihsCounts[regionKey];
+            if (!region) return;
+            const nextValue = Math.max(0, region[lesionKey] + delta);
+            region[lesionKey] = nextValue;
+            const cell = document.getElementById(`ihs-${regionKey}-${lesionKey}`);
+            if (cell) cell.textContent = String(nextValue);
+            actualizarIHS4();
+        }
+
+        function getIhsTotals() {
+            let n = 0;
+            let a = 0;
+            let f = 0;
+            let fd = 0;
+            IHS_REGIONS.forEach(region => {
+                n += ihsCounts[region.key].n;
+                a += ihsCounts[region.key].a;
+                f += ihsCounts[region.key].f;
+                fd += ihsCounts[region.key].fd;
+            });
+            return { n, a, f, fd, score: n + (a * 2) + (f * 4) };
+        }
+
+        function getIhsGrade(score) {
+            if (score < 4) return 'Leve';
+            if (score <= 10) return 'Moderado';
+            return 'Grave';
+        }
+
+        function actualizarIHS4() {
+            const totals = getIhsTotals();
+            setText('ihs4TotalN', totals.n);
+            setText('ihs4TotalA', totals.a);
+            setText('ihs4TotalF', totals.f);
+            setText('ihs4TotalFd', totals.fd);
+            setText('ihs4Resultado', totals.score);
+            setText('ihs4Gravedad', getIhsGrade(totals.score));
+        }
+
+        function calcularIHS4Ecografico() {
+            const nodulos = parseInt(getFieldValue('#nodulosEco'), 10) || 0;
+            const abscesos = parseInt(getFieldValue('#abscesosEco'), 10) || 0;
+            const fistulas = parseInt(getFieldValue('#fistulasEco'), 10) || 0;
+            const score = nodulos + (abscesos * 2) + (fistulas * 4);
+            setText('ihs4EcograficoResultado', score);
+            const badge = document.getElementById('ihs4EcograficoGravedad');
+            if (badge) {
+                badge.textContent = getIhsGrade(score);
+                badge.style.backgroundColor = score < 4 ? '#dcfce7' : score <= 10 ? '#ffedd5' : '#fee2e2';
+                badge.style.color = score < 4 ? '#166534' : score <= 10 ? '#9a3412' : '#991b1b';
+            }
+        }
+
+        function renderDlqiQuestions() {
+            const body = document.getElementById('dlqiQuestions');
+            if (!body) return;
+            body.innerHTML = DLQI_ITEMS.map((item, index) => {
+                const options = DLQI_OPTION_SETS[item.optionSet] || DLQI_OPTION_SETS.standard;
+                if (item.type === 'work_or_study_conditional') {
+                    const followupOptions = DLQI_OPTION_SETS[item.followupOptionSet] || [];
+                    return `
+                        <tr>
+                            <td>
+                                ${escapeHtml(item.text)}
+                            </td>
+                            <td>
+                                <input type="hidden" id="dlqi-answer-${index}" data-dlqi="${index}" value="">
+                                <input type="hidden" id="dlqi-answer-${index}-main" value="">
+                                <input type="hidden" id="dlqi-answer-${index}-followup" value="">
+                                <div class="answer-group" id="dlqi-main-group-${index}">
+                                    ${options.map(option => `
+                                        <button
+                                            type="button"
+                                            class="answer-option"
+                                            onclick="setDlqiMainAnswer(${index}, '${option.value}', this)"
+                                        >${escapeHtml(option.label)}</button>
+                                    `).join('')}
+                                </div>
+                                <div id="dlqi-followup-${index}" class="dlqi-subquestion hidden">
+                                    <div class="question-subnote" style="margin-bottom: 0.3rem;">Durante los ultimos siete dias, ¿le han molestado sus problemas de piel en su trabajo o en sus estudios?</div>
+                                    <div class="answer-group" id="dlqi-followup-group-${index}">
+                                        ${followupOptions.map(option => `
+                                            <button
+                                                type="button"
+                                                class="answer-option"
+                                                onclick="setDlqiFollowupAnswer(${index}, ${option.value}, this)"
+                                            >${escapeHtml(option.label)}</button>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }
+                return `
+                    <tr>
+                        <td>
+                            ${escapeHtml(item.text)}
+                            ${item.extra ? `<span class="question-subnote">${escapeHtml(item.extra)}</span>` : ''}
+                        </td>
+                        <td>
+                            <input type="hidden" id="dlqi-answer-${index}" data-dlqi="${index}" value="">
+                            <div class="answer-group">
+                                ${options.map(option => `
+                                    <button
+                                        type="button"
+                                        class="answer-option"
+                                        onclick="setQuestionAnswer('dlqi', ${index}, ${option.value}, this)"
+                                    >${escapeHtml(option.label)}</button>
+                                `).join('')}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderHsqolQuestions() {
+            const body = document.getElementById('hsqolQuestions');
+            if (!body) return;
+            body.innerHTML = HSQOL_ITEMS.map((item, index) => {
+                return `
+                    <tr>
+                        <td>${escapeHtml(item.text)}</td>
+                        <td>
+                            <input type="hidden" id="hsqol-answer-${index}" data-hsqol="${index}" value="">
+                            <div class="answer-group">
+                                ${HSQOL_OPTIONS.map(option => `
+                                    <button
+                                        type="button"
+                                        class="answer-option"
+                                        onclick="setQuestionAnswer('hsqol', ${index}, ${option.value}, this)"
+                                    >${escapeHtml(option.label)}</button>
+                                `).join('')}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function setQuestionAnswer(kind, index, value, button) {
+            const group = button.closest('.answer-group');
+            if (!group) return;
+            group.querySelectorAll('.answer-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            button.classList.add('active');
+            const hidden = document.getElementById(`${kind}-answer-${index}`);
+            if (hidden) hidden.value = String(value);
+            recalculateQuestionnaires();
+        }
+
+        function setDlqiMainAnswer(index, value, button) {
+            const mainGroup = document.getElementById(`dlqi-main-group-${index}`);
+            if (!mainGroup) return;
+            mainGroup.querySelectorAll('.answer-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            button.classList.add('active');
+
+            const finalAnswer = document.getElementById(`dlqi-answer-${index}`);
+            const mainAnswer = document.getElementById(`dlqi-answer-${index}-main`);
+            const followupAnswer = document.getElementById(`dlqi-answer-${index}-followup`);
+            const followupWrap = document.getElementById(`dlqi-followup-${index}`);
+            const followupGroup = document.getElementById(`dlqi-followup-group-${index}`);
+
+            if (mainAnswer) mainAnswer.value = value;
+            if (followupAnswer) followupAnswer.value = '';
+            if (followupGroup) {
+                followupGroup.querySelectorAll('.answer-option').forEach(option => {
+                    option.classList.remove('active');
+                });
+            }
+
+            if (value === 'yes') {
+                if (finalAnswer) finalAnswer.value = '3';
+                if (followupWrap) followupWrap.classList.add('hidden');
+            } else if (value === 'na') {
+                if (finalAnswer) finalAnswer.value = '0';
+                if (followupWrap) followupWrap.classList.add('hidden');
+            } else {
+                if (finalAnswer) finalAnswer.value = '';
+                if (followupWrap) followupWrap.classList.remove('hidden');
+            }
+
+            recalculateQuestionnaires();
+        }
+
+        function setDlqiFollowupAnswer(index, value, button) {
+            const followupGroup = document.getElementById(`dlqi-followup-group-${index}`);
+            if (!followupGroup) return;
+            followupGroup.querySelectorAll('.answer-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            button.classList.add('active');
+            const followupAnswer = document.getElementById(`dlqi-answer-${index}-followup`);
+            const finalAnswer = document.getElementById(`dlqi-answer-${index}`);
+            if (followupAnswer) followupAnswer.value = String(value);
+            if (finalAnswer) finalAnswer.value = String(value);
+            recalculateQuestionnaires();
+        }
+
+        function recalculateQuestionnaires() {
+            actualizarEstadoProms();
+            updateMoriskyResult();
+        }
+
+        function renderTherapyGroups() {
+            THERAPY_GROUPS.forEach(group => {
+                renderTherapyGroup(group.key);
+            });
+        }
+
+        function renderTherapyGroup(groupKey) {
+            const group = THERAPY_GROUPS.find(item => item.key === groupKey);
+            const container = document.getElementById(`therapy-${groupKey}`);
+            if (!group || !container) return;
+            container.innerHTML = therapyState[groupKey].map((entry, index) => {
+                const options = group.options.map(option => {
+                    const selected = option === entry.drug ? ' selected' : '';
+                    return `<option value="${escapeHtml(option)}"${selected}>${escapeHtml(option)}</option>`;
+                }).join('');
+                return `
+                    <div class="therapy-row">
+                        <select onchange="updateTherapyField('${groupKey}', ${index}, 'drug', this.value)">
+                            <option value="">Seleccione tratamiento</option>
+                            ${options}
+                        </select>
+                        <input
+                            type="text"
+                            placeholder="Posologia"
+                            value="${escapeHtml(entry.posology)}"
+                            oninput="updateTherapyField('${groupKey}', ${index}, 'posology', this.value)"
+                        >
+                        <div class="therapy-actions">
+                            <button type="button" class="therapy-action add" onclick="addTherapyRow('${groupKey}')" aria-label="Anadir linea">+</button>
+                            ${index > 0 ? `<button type="button" class="therapy-action remove" onclick="removeTherapyRow('${groupKey}', ${index})" aria-label="Eliminar linea">-</button>` : '<span class="therapy-action-placeholder"></span>'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateTherapyField(groupKey, index, field, value) {
+            if (!therapyState[groupKey] || !therapyState[groupKey][index]) return;
+            therapyState[groupKey][index][field] = value;
+        }
+
+        function addTherapyRow(groupKey) {
+            if (!therapyState[groupKey]) return;
+            therapyState[groupKey].push({ drug: '', posology: '' });
+            renderTherapyGroup(groupKey);
+        }
+
+        function removeTherapyRow(groupKey, index) {
+            if (!therapyState[groupKey] || index <= 0) return;
+            therapyState[groupKey].splice(index, 1);
+            if (!therapyState[groupKey].length) {
+                therapyState[groupKey].push({ drug: '', posology: '' });
+            }
+            renderTherapyGroup(groupKey);
+        }
+
+        function getTherapySelections() {
+            const selections = {};
+            THERAPY_GROUPS.forEach(group => {
+                selections[group.key] = therapyState[group.key]
+                    .map(entry => ({
+                        drug: flattenText(entry.drug),
+                        posology: flattenText(entry.posology)
+                    }))
+                    .filter(entry => entry.drug || entry.posology);
+            });
+            return selections;
+        }
+
+        function getDlqiResult() {
+            let total = 0;
+            let answered = 0;
+            document.querySelectorAll('[data-dlqi]').forEach(select => {
+                if (select.value !== '') {
+                    total += parseInt(select.value, 10);
+                    answered += 1;
+                }
+            });
+            return { total, answered, interpretation: interpretDlqi(total, answered) };
+        }
+
+        function getHsqolResult() {
+            let total = 0;
+            let answered = 0;
+            document.querySelectorAll('[data-hsqol]').forEach(select => {
+                if (select.value !== '') {
+                    const index = parseInt(select.getAttribute('data-hsqol'), 10);
+                    const rawValue = parseInt(select.value, 10);
+                    total += HSQOL_ITEMS[index].reverse ? (4 - rawValue) : rawValue;
+                    answered += 1;
+                }
+            });
+            return { total, answered, interpretation: interpretHsqol(total, answered) };
+        }
+
+        function interpretDlqi(total, answered) {
+            if (!answered) return 'No evaluado';
+            if (answered < DLQI_ITEMS.length) return 'Cuestionario incompleto';
+            if (total <= 1) return 'Sin impacto';
+            if (total <= 5) return 'Impacto leve';
+            if (total <= 10) return 'Impacto moderado';
+            if (total <= 20) return 'Impacto alto';
+            return 'Impacto muy alto';
+        }
+
+        function interpretHsqol(total, answered) {
+            if (!answered) return 'No evaluado';
+            if (answered < HSQOL_ITEMS.length) return 'Cuestionario incompleto';
+            if (total <= 24) return 'Impacto bajo';
+            if (total <= 31) return 'Impacto leve';
+            if (total <= 43) return 'Impacto moderado';
+            return 'Impacto alto';
+        }
+
+        function actualizarEstadoProms() {
+            const dlqi = getDlqiResult();
+            const hsqol = getHsqolResult();
+            setText('dlqiTotal', dlqi.total);
+            setText('dlqiInterpretacion', dlqi.interpretation);
+            setText('hsqolTotal', hsqol.total);
+            setText('hsqolInterpretacion', hsqol.interpretation);
+        }
+
+        function actualizarEvaDolor() {
+            setText('evaDolorValor', getFieldValue('#evaDolor') || '0');
+        }
+
+        function getSeguimientoDecision() {
+            return getFieldValue('#seguimientoDecision');
+        }
+
+        function formatTherapySummary(selections) {
+            const chunks = [];
+            THERAPY_GROUPS.forEach(group => {
+                const rows = selections[group.key] || [];
+                if (!rows.length) return;
+                const text = rows.map(row => {
+                    if (row.drug && row.posology) return `${row.drug} (${row.posology})`;
+                    return row.drug || row.posology || '';
+                }).filter(Boolean).join(', ');
+                chunks.push(`${group.label}: ${text}`);
+            });
+            return chunks.join(' | ');
+        }
+
+        function formatConcomitanteSummary(entries) {
+            const chunks = [];
+            THERAPY_GROUPS.forEach(group => {
+                const rows = (entries[group.key] || []).map(entry => {
+                    if (entry.drug && entry.posology) return `${entry.drug} (${entry.posology})`;
+                    return entry.drug || entry.posology || '';
+                }).filter(Boolean);
+                if (rows.length) chunks.push(`${group.label}: ${rows.join(', ')}`);
+            });
+            return chunks.join(' | ');
+        }
+
+        function boolSiNo(value) {
+            return value ? 'Si' : 'No';
+        }
+
+        function getDestinationSheet(consultaValue) {
+            if (consultaValue === 'multidisciplinar') return 'Multidisciplinar';
+            return 'Monografica';
+        }
+
+        function createExportRow() {
+            const row = {};
+            HEADERS_HS.forEach(header => {
+                row[header] = '';
+            });
+            return row;
+        }
+
+        function mergeTherapyStates(baseState, extraState) {
+            const merged = createEmptyTherapyState();
+            THERAPY_GROUPS.forEach(group => {
+                const base = (baseState[group.key] || []).map(entry => ({ drug: entry.drug || '', posology: entry.posology || '' }));
+                const extra = (extraState[group.key] || []).map(entry => ({ drug: entry.drug || '', posology: entry.posology || '' }));
+                merged[group.key] = [...base, ...extra].filter(entry => flattenText(entry.drug) || flattenText(entry.posology));
+                if (!merged[group.key].length) merged[group.key] = [{ drug: '', posology: '' }];
+            });
+            return merged;
+        }
+
+        function mapTherapyStateToRow(row, prefix, state) {
+            THERAPY_GROUPS.forEach(group => {
+                const entries = (state[group.key] || [])
+                    .map(entry => ({ drug: flattenText(entry.drug), posology: flattenText(entry.posology) }))
+                    .filter(entry => entry.drug || entry.posology);
+                const top = entries.slice(0, THERAPY_SLOT_LIMIT);
+                const rest = entries.slice(THERAPY_SLOT_LIMIT);
+                for (let i = 1; i <= THERAPY_SLOT_LIMIT; i += 1) {
+                    const entry = top[i - 1] || { drug: '', posology: '' };
+                    row[`${prefix}_${group.key}_farmaco_${i}`] = entry.drug;
+                    row[`${prefix}_${group.key}_posologia_${i}`] = entry.posology;
+                }
+                row[`${prefix}_${group.key}_otros`] = rest
+                    .map(entry => `${entry.drug}|${entry.posology}`)
+                    .join(' || ');
+            });
+        }
+
+        function getCurrentTreatmentSummaryForSnapshot() {
+            if (isFollowupVisit()) {
+                const decision = getSeguimientoDecision();
+                if (decision === 'cambiar') {
+                    return formatTherapySummary(getSeguimientoTherapySelections());
+                }
+                if (decision === 'continuar') {
+                    const previo = getText('seguimientoTratamientoPrevioTexto');
+                    const ajuste = flattenText(getFieldValue('#seguimientoAjuste'));
+                    const concomitante = formatConcomitanteSummary(getSeguimientoConcomitanteSelections());
+                    const parts = [];
+                    if (previo) parts.push(previo);
+                    if (ajuste) parts.push(`Ajuste: ${ajuste}`);
+                    if (concomitante) parts.push(`Concomitante: ${concomitante}`);
+                    return parts.join(' | ');
+                }
+                return getText('seguimientoTratamientoPrevioTexto');
+            }
+            return formatTherapySummary(getTherapySelections());
+        }
+
+        function collectAnamnesisSnapshot() {
+            return {
+                antecedentes: getCheckedValue('antecedentes'),
+                anioInicio: getFieldValue('input[name="anioInicio"]'),
+                fumador: getCheckedValue('fumador'),
+                cigarros: getFieldValue('input[name="cigarros"]'),
+                aniosFumador: getFieldValue('input[name="aniosFumador"]'),
+                sexo: getCheckedValue('sexo'),
+                anioDiagnostico: getFieldValue('input[name="anioDiagnostico"]'),
+                peso: getFieldValue('input[name="peso"]'),
+                talla: getFieldValue('input[name="talla"]'),
+                imc: getFieldValue('input[name="imc"]')
+            };
+        }
+
+        function collectComorbSnapshot() {
+            return {
+                active: Array.from(document.querySelectorAll('.comorbilidad-item.active')).map(el => el.getAttribute('data-comorb-key') || ''),
+                otras: getFieldValue('textarea[name="otrasComorbilidades"]')
+            };
+        }
+
+        function saveCurrentVisitSnapshot() {
+            const nusha = flattenText(getFieldValue('input[name="nusha"]')).toUpperCase();
+            if (!nusha) return;
+
+            const store = readPatientStore();
+            store[nusha] = {
+                updatedAt: new Date().toISOString(),
+                fechaVisita: getFieldValue('input[name="fecha"]'),
+                consulta: getFieldValue('select[name="consulta"]'),
+                tipoVisita: getFieldValue('select[name="tipoVisita"]'),
+                anamnesis: collectAnamnesisSnapshot(),
+                comorbilidades: collectComorbSnapshot(),
+                treatmentSummary: getCurrentTreatmentSummaryForSnapshot()
+            };
+            writePatientStore(store);
+        }
+
+        function exportToExcel() {
+            const dlqi = getDlqiResult();
+            const hsqol = getHsqolResult();
+            const ihs = getIhsTotals();
+            const therapies = getTherapySelections();
+            const seguimientoTherapies = getSeguimientoTherapySelections();
+            const seguimientoDecision = getSeguimientoDecision();
+            const morisky = getMoriskyResult();
+            const seguimientoConcomitantes = getSeguimientoConcomitanteSelections();
+            const row = createExportRow();
+            const consulta = getFieldValue('select[name="consulta"]');
+            const tipoVisita = getFieldValue('select[name="tipoVisita"]');
+            const destinationSheet = getDestinationSheet(consulta);
+
+            row.nusha = getFieldValue('input[name="nusha"]');
+            row.fecha_visita = getFieldValue('input[name="fecha"]');
+            row.tipo_visita = tipoVisita;
+            row.consulta = consulta;
+            row.hoja_destino = destinationSheet;
+            row.cie = 'L73.2';
+            row.origen_paciente = getFieldValue('select[name="origenPaciente"]');
+            row.solicitud_analitica = boolSiNo(analiticaActiva);
+            row.solicitud_medicina_preventiva = boolSiNo(medicinaActiva);
+            row.antecedentes_familiares_hs = getCheckedValue('antecedentes');
+            row.anio_inicio = getFieldValue('input[name="anioInicio"]');
+            row.fumador = getCheckedValue('fumador');
+            row.cigarros_dia = getFieldValue('input[name="cigarros"]');
+            row.anios_fumador = getFieldValue('input[name="aniosFumador"]');
+            row.sexo_nacimiento = getCheckedValue('sexo');
+            row.anio_diagnostico = getFieldValue('input[name="anioDiagnostico"]');
+            row.peso_kg = getFieldValue('input[name="peso"]');
+            row.talla_m = getFieldValue('input[name="talla"]');
+            row.imc = getFieldValue('input[name="imc"]');
+
+            COMORBIDITY_FIELDS.forEach(field => {
+                const node = document.querySelector(`.comorbilidad-item[data-comorb-key="${field.key}"]`);
+                row[field.key] = boolSiNo(node && node.classList.contains('active'));
+            });
+            row.otras_comorbilidades = flattenText(getFieldValue('textarea[name="otrasComorbilidades"]'));
+
+            IHS_REGIONS.forEach(region => {
+                const counts = ihsCounts[region.key];
+                row[`ihs_${region.key}_n`] = String(counts.n);
+                row[`ihs_${region.key}_a`] = String(counts.a);
+                row[`ihs_${region.key}_f`] = String(counts.f);
+                row[`ihs_${region.key}_fd`] = String(counts.fd);
+            });
+
+            row.otras_regiones = flattenText(getFieldValue('#otrasRegiones'));
+            row.cicatrices = getFieldValue('#cicatrices');
+            row.otras_lesiones = flattenText(getFieldValue('#otrasLesiones'));
+            row.ihs_total_n = String(ihs.n);
+            row.ihs_total_a = String(ihs.a);
+            row.ihs_total_f = String(ihs.f);
+            row.ihs_total_fd = String(ihs.fd);
+            row.ihs4_total = String(ihs.score);
+            row.ihs4_gravedad = getIhsGrade(ihs.score);
+            row.eco_nodulos = getFieldValue('#nodulosEco');
+            row.eco_abscesos = getFieldValue('#abscesosEco');
+            row.eco_fistulas = getFieldValue('#fistulasEco');
+            row.eco_ihs4 = getText('ihs4EcograficoResultado');
+            row.eco_gravedad = getText('ihs4EcograficoGravedad');
+            row.eco_doppler = getCheckedValue('doppler');
+
+            DLQI_ITEMS.forEach((_, index) => {
+                row[`dlqi_q${index + 1}`] = getFieldValue(`#dlqi-answer-${index}`);
+            });
+            row.dlqi_total = String(dlqi.total);
+            row.dlqi_interpretacion = dlqi.interpretation;
+            HSQOL_ITEMS.forEach((_, index) => {
+                row[`hsqol_q${index + 1}`] = getFieldValue(`#hsqol-answer-${index}`);
+            });
+            row.hsqol_total = String(hsqol.total);
+            row.hsqol_interpretacion = hsqol.interpretation;
+            row.eva_dolor = getFieldValue('#evaDolor');
+
+            row.cirugia_aplica = boolSiNo(isSurgeryApplicable());
+            SURGERY_FIELDS.forEach(field => {
+                const checkbox = document.querySelector(`input[name="${field.checkbox}"]`);
+                const note = document.querySelector(`input[name="${field.note}"]`);
+                row[field.checkbox] = boolSiNo(checkbox && checkbox.checked);
+                row[field.note] = note ? flattenText(note.value) : '';
+            });
+
+            if (tipoVisita === 'primera') {
+                mapTherapyStateToRow(row, 'tx_primera', therapies);
+            } else if (tipoVisita === 'seguimiento') {
+                if (seguimientoDecision === 'cambiar') {
+                    mapTherapyStateToRow(row, 'tx_seguimiento', seguimientoTherapies);
+                } else if (seguimientoDecision === 'continuar') {
+                    mapTherapyStateToRow(row, 'tx_seguimiento', mergeTherapyStates(seguimientoBaselineTherapyState, seguimientoConcomitantes));
+                } else {
+                    mapTherapyStateToRow(row, 'tx_seguimiento', seguimientoBaselineTherapyState);
+                }
+            }
+
+            row.seguimiento_tratamiento_previo = getText('seguimientoTratamientoPrevioTexto');
+            row.seguimiento_tratamiento_actual = getFieldValue('#seguimientoTratamientoActual');
+            row.seguimiento_decision = seguimientoDecision;
+            row.seguimiento_adherencia = getFieldValue('#seguimientoAdherencia');
+            row.seguimiento_ajuste_pauta = flattenText(getFieldValue('#seguimientoAjuste'));
+            row.seguimiento_morisky_q1 = morisky.answers[0] || '';
+            row.seguimiento_morisky_q2 = morisky.answers[1] || '';
+            row.seguimiento_morisky_q3 = morisky.answers[2] || '';
+            row.seguimiento_morisky_q4 = morisky.answers[3] || '';
+            row.seguimiento_morisky_resultado = morisky.status;
+            row.seguimiento_motivo_cambio = flattenText(getFieldValue('#seguimientoMotivoCambio'));
+            row.seguimiento_efectos_adversos = boolSiNo(document.getElementById('seguimientoEfectosAdversos')?.checked);
+            row.otros_comentarios = flattenText(getFieldValue('textarea[name="otrosComentarios"]'));
+            row.hallazgos_interes = flattenText(getFieldValue('textarea[name="hallazgosInteres"]'));
+
+            saveCurrentVisitSnapshot();
+            const values = HEADERS_HS.map(header => String(row[header] || '').replace(/\t/g, ' '));
+            copyToClipboard(values.join('\t'), `Datos exportados para pegar en Excel (hoja ${destinationSheet}, esquema ${HEADERS_HS_VERSION})`);
+        }
+
+        function toggleComorbilidad(item) {
+            item.classList.toggle('active');
+        }
+
+        function nuevoPaciente() {
+            if (!confirm('Se limpiaran todos los datos del formulario. Continuar?')) return;
+
+            document.querySelectorAll('input[type="text"], input[type="number"], input[type="date"]').forEach(input => {
+                input.value = '';
+            });
+            document.querySelectorAll('select').forEach(select => {
+                select.selectedIndex = 0;
+            });
+            document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
+                input.checked = false;
+            });
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.value = '';
+            });
+            document.querySelectorAll('.comorbilidad-item.active').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            analiticaActiva = false;
+            medicinaActiva = false;
+            document.getElementById('analiticaBtn').classList.remove('active');
+            document.getElementById('medicinaBtn').classList.remove('active');
+
+            ihsCounts = createEmptyIhsCounts();
+            therapyState = createEmptyTherapyState();
+            seguimientoTherapyState = createEmptyTherapyState();
+            seguimientoConcomitanteState = createEmptyConcomitanteState();
+            renderIhsRegions();
+            renderDlqiQuestions();
+            renderHsqolQuestions();
+            renderTherapyGroups();
+            renderSeguimientoTherapyGroups();
+            renderSeguimientoConcomitanteGroups();
+            resetSeguimientoFarmaco();
+            hideFollowupPreloadCard();
+            previousVisitType = '';
+            setCurrentDate();
+            toggleCamposFumador();
+            actualizarOrigenPaciente();
+            recalculateQuestionnaires();
+            actualizarEvaDolor();
+            calcularIHS4Ecografico();
+            document.getElementById('informe').innerHTML = '';
+            mostrarNotificacion('Formulario limpiado');
+        }
+
+        function generateReport() {
+            const informe = document.getElementById('informe');
+            informe.innerHTML = '';
+
+            const container = document.createElement('div');
+            container.className = 'reporte-container';
+            container.style.cssText = 'background: white; padding: 24px; border-radius: 18px; box-shadow: 0 8px 24px rgba(15,45,61,0.08); margin-top: 20px;';
+
+            const title = document.createElement('h2');
+            title.textContent = 'REGISTRO CLINICO - HIDRADENITIS SUPURATIVA';
+            title.style.cssText = 'color: var(--primary-color); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #e5edf1;';
+            container.appendChild(title);
+
+            const header = document.createElement('div');
+            header.innerHTML = [
+                buildLine('Centro', 'Hospital Universitario de Valme'),
+                buildLine('Fecha', formatDate(getFieldValue('input[name="fecha"]'))),
+                buildLine('NUSHA', getFieldValue('input[name="nusha"]')),
+                buildLine('Consulta', getSelectedText('select[name="consulta"]')),
+                buildLine('Tipo de visita', getSelectedText('select[name="tipoVisita"]')),
+                buildLine('Origen del paciente', getSelectedText('select[name="origenPaciente"]')),
+                analiticaActiva ? buildLine('Analitica', 'Solicitada / revisada') : '',
+                medicinaActiva ? buildLine('Medicina Preventiva', 'Solicitada / revisada') : ''
+            ].join('');
+            container.appendChild(header);
+
+            appendSection(container, 'ANAMNESIS', buildAnamnesisHtml());
+            appendSection(container, 'COMORBILIDADES', buildComorbilidadesHtml());
+            appendSection(container, 'REGIONES AFECTAS E IHS4', buildIhsHtml());
+            appendSection(container, 'PRUEBA ECOGRAFICA', buildEcografiaHtml());
+            appendSection(container, 'PROMS', buildPromsHtml());
+            if (isSurgeryApplicable()) {
+                appendSection(container, 'CIRUGIA', buildCirugiaHtml());
+            }
+            appendSection(container, 'FARMACOTERAPIA', buildFarmacoHtml());
+            appendSection(container, 'HALLAZGOS DE INTERES', buildHallazgosHtml());
+
+            informe.appendChild(container);
+            informe.scrollIntoView({ behavior: 'smooth' });
+            saveCurrentVisitSnapshot();
+            copyToClipboard(container.innerText.replace(/\n{3,}/g, '\n\n'), 'Informe generado y copiado al portapapeles');
+        }
+
+        function buildAnamnesisHtml() {
+            const lines = [];
+            const antecedentes = getCheckedValue('antecedentes');
+            if (antecedentes) lines.push(buildLine('Antecedentes familiares HS', antecedentes === 'si' ? 'Si' : 'No'));
+            if (getFieldValue('input[name="anioInicio"]')) lines.push(buildLine('Ano inicio', getFieldValue('input[name="anioInicio"]')));
+            const fumador = getCheckedValue('fumador');
+            if (fumador) lines.push(buildLine('Fumador', fumador === 'si' ? 'Si' : 'No'));
+            if (getFieldValue('input[name="cigarros"]')) lines.push(buildLine('Cigarros por dia', getFieldValue('input[name="cigarros"]')));
+            if (getFieldValue('input[name="aniosFumador"]')) lines.push(buildLine('Anos fumador', getFieldValue('input[name="aniosFumador"]')));
+            if (getCheckedValue('sexo')) lines.push(buildLine('Sexo al nacimiento', getCheckedValue('sexo') === 'masculino' ? 'Masculino' : 'Femenino'));
+            if (getFieldValue('input[name="anioDiagnostico"]')) lines.push(buildLine('Ano diagnostico', getFieldValue('input[name="anioDiagnostico"]')));
+            if (getFieldValue('input[name="peso"]')) lines.push(buildLine('Peso', `${getFieldValue('input[name="peso"]')} kg`));
+            if (getFieldValue('input[name="talla"]')) lines.push(buildLine('Talla', `${getFieldValue('input[name="talla"]')} m`));
+            if (getFieldValue('input[name="imc"]')) lines.push(buildLine('IMC', getFieldValue('input[name="imc"]')));
+            return lines.join('');
+        }
+
+        function buildComorbilidadesHtml() {
+            const active = Array.from(document.querySelectorAll('.comorbilidad-item.active')).map(el => escapeHtml(el.textContent.trim()));
+            const lines = [];
+            if (active.length) {
+                lines.push('<p><strong>Comorbilidades presentes:</strong></p><ul style="margin-left:20px;">');
+                active.forEach(item => lines.push(`<li>${item}</li>`));
+                lines.push('</ul>');
+            }
+            if (getFieldValue('textarea[name="otrasComorbilidades"]')) {
+                lines.push(buildLine('Otras comorbilidades', flattenText(getFieldValue('textarea[name="otrasComorbilidades"]'))));
+            }
+            return lines.join('');
+        }
+
+        function buildIhsHtml() {
+            const lines = [];
+            const activeRegions = IHS_REGIONS.filter(region => {
+                const counts = ihsCounts[region.key];
+                return counts.n || counts.a || counts.f || counts.fd;
+            });
+            activeRegions.forEach(region => {
+                const counts = ihsCounts[region.key];
+                lines.push(buildLine(region.label, `N ${counts.n} | A ${counts.a} | F ${counts.f} | FD ${counts.fd}`));
+            });
+            if (getFieldValue('#otrasRegiones')) lines.push(buildLine('Otras regiones', flattenText(getFieldValue('#otrasRegiones'))));
+            if (getFieldValue('#cicatrices')) lines.push(buildLine('Cicatrices', getFieldValue('#cicatrices')));
+            if (getFieldValue('#otrasLesiones')) lines.push(buildLine('Otras lesiones', flattenText(getFieldValue('#otrasLesiones'))));
+            const ihs = getIhsTotals();
+            lines.push(buildLine('Totales IHS4', `N ${ihs.n} | A ${ihs.a} | F ${ihs.f} | FD ${ihs.fd}`));
+            lines.push(buildLine('IHS4', `${ihs.score} (${getIhsGrade(ihs.score)})`));
+            return lines.join('');
+        }
+
+        function buildEcografiaHtml() {
+            const lines = [];
+            if (getFieldValue('#nodulosEco')) lines.push(buildLine('Nodulos', getFieldValue('#nodulosEco')));
+            if (getFieldValue('#abscesosEco')) lines.push(buildLine('Abscesos', getFieldValue('#abscesosEco')));
+            if (getFieldValue('#fistulasEco')) lines.push(buildLine('Fistulas', getFieldValue('#fistulasEco')));
+            if (getText('ihs4EcograficoResultado')) {
+                lines.push(buildLine('IHS4 ecografico', `${getText('ihs4EcograficoResultado')} (${getText('ihs4EcograficoGravedad')})`));
+            }
+            if (getCheckedValue('doppler')) lines.push(buildLine('Doppler', getCheckedValue('doppler') === 'si' ? 'Si' : 'No'));
+            return lines.join('');
+        }
+
+        function buildPromsHtml() {
+            const dlqi = getDlqiResult();
+            const hsqol = getHsqolResult();
+            const lines = [];
+            if (dlqi.answered) lines.push(buildLine('DLQI', `${dlqi.total} (${dlqi.interpretation})`));
+            if (hsqol.answered) lines.push(buildLine('HSQoL-24', `${hsqol.total} (${hsqol.interpretation})`));
+            if (getFieldValue('#evaDolor')) lines.push(buildLine('EVA dolor', getFieldValue('#evaDolor')));
+            return lines.join('');
+        }
+
+        function buildCirugiaHtml() {
+            const lines = [];
+            let hasSelection = false;
+            SURGERY_FIELDS.forEach(field => {
+                const checkbox = document.querySelector(`input[name="${field.checkbox}"]`);
+                const note = document.querySelector(`input[name="${field.note}"]`);
+                if (checkbox && checkbox.checked) {
+                    hasSelection = true;
+                    const detail = note && note.value ? ` - ${escapeHtml(flattenText(note.value))}` : '';
+                    lines.push(`<p><strong>${field.label}:</strong> Si${detail}</p>`);
+                }
+            });
+            if (!hasSelection) {
+                lines.push('<p>No se indica cirugia en esta visita.</p>');
+            }
+            return lines.join('');
+        }
+
+        function buildFarmacoHtml() {
+            const lines = [];
+            if (isFollowupVisit()) {
+                const decision = getSeguimientoDecision();
+                const previo = getText('seguimientoTratamientoPrevioTexto');
+                if (previo) lines.push(buildLine('Tratamiento previo', previo));
+                if (decision) lines.push(buildLine('Decision terapeutica', decision === 'continuar' ? 'Continuar tratamiento' : 'Cambiar tratamiento'));
+
+                if (decision === 'continuar') {
+                    const morisky = getMoriskyResult();
+                    const txActual = getFieldValue('#seguimientoTratamientoActual') || previo;
+                    const concomitantes = getSeguimientoConcomitanteSelections();
+                    const concomitanteTexto = formatConcomitanteSummary(concomitantes);
+                    if (getFieldValue('#seguimientoAdherencia')) lines.push(buildLine('Adherencia declarada', getFieldValue('#seguimientoAdherencia')));
+                    if (morisky.status !== 'incompleto') lines.push(buildLine('Morisky-Green', morisky.status === 'adherente' ? 'Adherente' : 'No adherente'));
+                    if (txActual) lines.push(buildLine('Tratamiento actual', txActual));
+                    if (getFieldValue('#seguimientoAjuste')) lines.push(buildLine('Ajuste de pauta', flattenText(getFieldValue('#seguimientoAjuste'))));
+                    if (concomitanteTexto) lines.push(buildLine('Tratamiento concomitante', concomitanteTexto));
+                }
+
+                if (decision === 'cambiar') {
+                    if (getFieldValue('#seguimientoMotivoCambio')) lines.push(buildLine('Motivo del cambio', flattenText(getFieldValue('#seguimientoMotivoCambio'))));
+                    const ea = document.getElementById('seguimientoEfectosAdversos');
+                    if (ea && ea.checked) lines.push(buildLine('Efectos adversos', 'Si'));
+                    const seguimientoTherapies = getSeguimientoTherapySelections();
+                    THERAPY_GROUPS.forEach(group => {
+                        const entries = seguimientoTherapies[group.key];
+                        if (!entries.length) return;
+                        lines.push(`<p><strong>${escapeHtml(group.label)} (nuevo esquema):</strong></p><ul style="margin-left:20px;">`);
+                        entries.forEach(entry => {
+                            const detail = entry.posology ? ` - ${escapeHtml(entry.posology)}` : '';
+                            lines.push(`<li>${escapeHtml(entry.drug || 'Tratamiento sin especificar')}${detail}</li>`);
+                        });
+                        lines.push('</ul>');
+                    });
+                }
+            } else {
+                const therapies = getTherapySelections();
+                THERAPY_GROUPS.forEach(group => {
+                    const entries = therapies[group.key];
+                    if (!entries.length) return;
+                    lines.push(`<p><strong>${escapeHtml(group.label)}:</strong></p><ul style="margin-left:20px;">`);
+                    entries.forEach(entry => {
+                        const detail = entry.posology ? ` - ${escapeHtml(entry.posology)}` : '';
+                        lines.push(`<li>${escapeHtml(entry.drug || 'Tratamiento sin especificar')}${detail}</li>`);
+                    });
+                    lines.push('</ul>');
+                });
+            }
+            if (getFieldValue('textarea[name="otrosComentarios"]')) lines.push(buildLine('Otros comentarios', flattenText(getFieldValue('textarea[name="otrosComentarios"]'))));
+            return lines.join('');
+        }
+
+        function buildHallazgosHtml() {
+            if (!getFieldValue('textarea[name="hallazgosInteres"]')) return '';
+            return `<p>${escapeHtml(flattenText(getFieldValue('textarea[name="hallazgosInteres"]')))}</p>`;
+        }
+
+        function appendSection(container, title, html) {
+            if (!html || !html.trim()) return;
+            const section = document.createElement('div');
+            section.style.cssText = 'margin-top: 18px;';
+            section.innerHTML = `<h3 style="color: var(--primary-color); margin-bottom: 8px; border-bottom: 1px solid #e5edf1; padding-bottom: 6px;">${title}</h3>${html}`;
+            container.appendChild(section);
+        }
+
+        function showNotification(message) {
+            mostrarNotificacion(message);
+        }
+
+        function mostrarNotificacion(mensaje) {
+            const notificacion = document.createElement('div');
+            notificacion.textContent = mensaje;
+            notificacion.style.cssText = 'position:fixed; top:20px; right:20px; background:var(--success-color); color:white; padding:1rem 1.2rem; border-radius:12px; box-shadow:0 12px 24px rgba(0,0,0,0.18); z-index:1000; font-weight:700;';
+            document.body.appendChild(notificacion);
+            setTimeout(() => {
+                notificacion.style.opacity = '0';
+                notificacion.style.transform = 'translateX(100%)';
+                setTimeout(() => notificacion.remove(), 250);
+            }, 2500);
+        }
+
+        function copyReport() {
+            const informe = document.getElementById('informe');
+            if (!informe.textContent.trim()) {
+                alert('Primero debe generar un informe');
+                return;
+            }
+            copyToClipboard(informe.innerText.replace(/\n{3,}/g, '\n\n'), 'Informe copiado al portapapeles');
+        }
+
+        function copyToClipboard(text, successMessage) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification(successMessage);
+            }).catch(() => {
+                const temp = document.createElement('textarea');
+                temp.value = text;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+                showNotification(successMessage);
+            });
+        }
+
+        function isSurgeryApplicable() {
+            const section = document.getElementById('cirugiaSection');
+            return section ? !section.classList.contains('section-hidden') : false;
+        }
+
+        function getFieldValue(selector) {
+            const element = document.querySelector(selector);
+            return element ? element.value.trim() : '';
+        }
+
+        function setFieldValue(selector, value) {
+            const element = document.querySelector(selector);
+            if (element) element.value = value;
+        }
+
+        function getCheckedValue(name) {
+            const element = document.querySelector(`input[name="${name}"]:checked`);
+            return element ? element.value : '';
+        }
+
+        function setRadioValue(name, value) {
+            document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+                input.checked = input.value === value;
+            });
+        }
+
+        function getSelectedText(selector) {
+            const element = document.querySelector(selector);
+            return element && element.value ? element.options[element.selectedIndex].text : '';
+        }
+
+        function setText(id, value) {
+            const element = document.getElementById(id);
+            if (element) element.textContent = String(value);
+        }
+
+        function getText(id) {
+            const element = document.getElementById(id);
+            return element ? element.textContent.trim() : '';
+        }
+
+        function formatDate(value) {
+            if (!value) return '';
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return value;
+            return date.toLocaleDateString('es-ES');
+        }
+
+        function flattenText(value) {
+            return String(value || '').replace(/\s+/g, ' ').trim();
+        }
+
+        function buildLine(label, value) {
+            if (!value) return '';
+            return `<p><strong>${escapeHtml(label)}:</strong> ${escapeHtml(String(value))}</p>`;
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+    </script>
+</body>
+</html>

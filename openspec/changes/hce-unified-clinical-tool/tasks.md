@@ -53,12 +53,12 @@ Chain strategy: pending
 
 ## Phase 4: Parity, Docs, Legacy (PR 4)
 
-- [ ] 4.1 Run parity diff: side-by-side hub TSV vs legacy TSV for ≥3 visits (first monográfica, first multidisciplinar, follow-up); cells byte-identical.
-- [ ] 4.2 Create `docs/CONTRATO_DATOS_HS.md` (schema contract) and `docs/ESTADO_IMPLEMENTACION_HS.md` (parity status, limitations, offline fallback).
-- [ ] 4.3 Update `AGENTS.md` and `openspec/config.yaml` — reference-only classification for nursing file, HUV Rocio templates, external repos.
-- [ ] 4.4 Rename legacy files to `*.legacy.html` with banner redirecting to hub; document future move to `HCE/_legacy/`.
-- [ ] 4.5 Scope guard: `grep -E "enfermer|cura|psO|pso" src/` returns zero route matches. Privacy guard: DevTools confirms no localStorage/sessionStorage/IndexedDB after session.
-- [ ] 4.6 **Verify PR 4**: `npm run build` → serve `dist/` via `python start_server.py` → all four routes work offline; no nursing/PsO nav items visible.
+- [x] 4.1 Run parity diff: side-by-side hub TSV vs legacy TSV for ≥3 visits (first monográfica, first multidisciplinar, follow-up); cells byte-identical.
+- [x] 4.2 Create `docs/CONTRATO_DATOS_HS.md` (schema contract) and `docs/ESTADO_IMPLEMENTACION_HS.md` (parity status, limitations, offline fallback).
+- [x] 4.3 Update `AGENTS.md` and `openspec/config.yaml` — reference-only classification for nursing file, HUV Rocio templates, external repos.
+- [x] 4.4 Rename legacy files to `*.legacy.html` with banner redirecting to hub; document future move to `HCE/_legacy/`.
+- [x] 4.5 Scope guard: `grep -E "enfermer|cura|psO|pso" src/` returns zero route matches. Privacy guard: DevTools confirms no localStorage/sessionStorage/IndexedDB after session.
+- [x] 4.6 **Verify PR 4**: `npm run build` → serve `dist/` via `python start_server.py` → all four routes work offline; no nursing/PsO nav items visible.
 
 ## Non-Tasks / Exclusions
 

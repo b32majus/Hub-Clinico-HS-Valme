@@ -638,6 +638,11 @@ export function collectFormData(container, opts = {}) {
   const payload = {};
 
   // Simple fields
+  const siNoSelectFields = new Set([
+    'antecedentes_familiares_hs',
+    'fumador',
+    'eco_doppler'
+  ]);
   container.querySelectorAll('[data-field]').forEach(el => {
     const key = el.getAttribute('data-field');
     if (key === 'cirugia_aplica') return;
@@ -645,6 +650,10 @@ export function collectFormData(container, opts = {}) {
       payload[key] = el.checked ? 'Si' : 'No';
     } else {
       payload[key] = (el.value || '').trim();
+    }
+    if (siNoSelectFields.has(key)) {
+      const lower = String(payload[key] || '').toLowerCase();
+      payload[key] = lower === 'si' ? 'Si' : lower === 'no' ? 'No' : payload[key];
     }
   });
 

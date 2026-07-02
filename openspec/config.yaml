@@ -1,0 +1,115 @@
+project: valme
+initialized: 2026-07-01
+persistence: hybrid
+strict_tdd: false
+
+context:
+  - Clinical-care improvement workspace for HS Valme, organized by artifact purpose rather than application modules.
+  - HCE/ contains operational clinical HTML tools, including the unified HS hub under HCE/hs_valme_hub/.
+  - outputs/ contains generated slide decks and previews.
+  - Root files contain reports, protocols, meeting materials, and patient-facing assets.
+  - Reference-only assets (do not integrate): HCE/HS_consulta_enfermeria_HVR_2.html, HCE/PsO/, Plantillas Historia Clinica HUV Rocio/, and external repos HS-Canarias/Badajoz.
+  - Preserve existing clinical wording unless a change explicitly asks for rewrite.
+  - Keep source scripts and generated artifacts aligned when updating generated outputs.
+
+stack:
+  primary: static HTML/CSS clinical and presentation artifacts
+  scripts:
+    python:
+      - start_server.py
+      - try_build_ap.py
+      - show_images_tmp.py
+      - try_update_urgencias.py
+      - update_diptico.py
+    node:
+      - build_gt_valme_redesign.mjs
+      - build_gt_valme_redesign_v2.mjs
+      - HCE/hs_valme_hub/scripts/vendorize.mjs
+  hub:
+    path: HCE/hs_valme_hub
+    entry: HCE/hs_valme_hub/index.html
+    build_output: HCE/hs_valme_hub/dist
+    build_command: cd HCE/hs_valme_hub && npm run build
+    checks:
+      - cd HCE/hs_valme_hub && node tests/tsv-export-check-node.mjs
+      - cd HCE/hs_valme_hub && node tests/dashboard-check-node.mjs
+      - cd HCE/hs_valme_hub && node tests/stale-base-check-node.mjs
+      - cd HCE/hs_valme_hub && node tests/parity-check-node.mjs
+      - cd HCE/hs_valme_hub && node tests/scope-guard-check-node.mjs
+  runtime_notes:
+    - Python scripts are standalone and use the standard library where inspected.
+    - Node deck scripts depend on @oai/artifact-tool from a local Codex runtime cache path.
+
+conventions:
+  structure:
+    - Place clinical forms and dashboards under HCE/.
+    - Place generated presentation exports and previews under outputs/.
+    - Keep reference HUV Rocio templates under Plantillas Historia Clinica HUV Rocio/.
+  naming:
+    - Prefer descriptive Spanish filenames matching existing artifacts.
+    - Use version suffixes such as _v1, _v2, or _REDESIGN.
+    - Use lowercase, hyphen-free HTML/CSS asset names when creating new files.
+  implementation:
+    - Use UTF-8 text files.
+    - Keep Python and Node scripts simple, explicit, self-contained, and minimally abstracted.
+
+testing:
+  strict_tdd: false
+  reason: No automated test runner, package manifest, CI, coverage, linter, type checker, or formatter config was detected.
+  validation_model: artifact-based manual validation
+  test_runner:
+    available: false
+    framework: null
+    command: null
+  layers:
+    unit:
+      available: false
+      tool: null
+    integration:
+      available: false
+      tool: null
+    e2e:
+      available: false
+      tool: null
+  coverage:
+    available: false
+    command: null
+  quality:
+    linter:
+      available: false
+      command: null
+    type_checker:
+      available: false
+      command: null
+    formatter:
+      available: false
+      command: null
+  manual_checks:
+    - Run python start_server.py and review HTML artifacts at http://127.0.0.1:8003/.
+    - Run python try_build_ap.py when regenerating AP infographic HTML.
+    - Run node build_gt_valme_redesign.mjs or build_gt_valme_redesign_v2.mjs when rebuilding GT slide assets.
+    - Run cd HCE/hs_valme_hub && npm run build and review dist/ after hub changes.
+    - Run all HCE/hs_valme_hub Node checks after schema, form, or dashboard changes.
+    - Review generated PPTX, DOCX, PDF, PNG, and HTML outputs visually before sharing.
+
+phase_rules:
+  proposal:
+    - Keep clinical workflow assumptions explicit.
+    - Ask before changes that rewrite clinical wording or change care flow semantics.
+  spec:
+    - Express requirements around observable artifact behavior and clinical workflow outcomes.
+    - Include manual validation scenarios when automated tests are unavailable.
+  design:
+    - Prefer source-script changes over direct generated-artifact edits when reproducibility matters.
+    - Identify generated outputs that must be regenerated and reviewed.
+  tasks:
+    - Keep work units within a 400 changed-line review budget.
+    - Chained PR strategy is ask-always when a change is likely to exceed the review budget.
+  apply:
+    - Preserve existing clinical wording unless explicitly authorized.
+    - Keep generated assets aligned with their source scripts.
+  verify:
+    - Use artifact-based manual validation by default.
+    - Document commands run, artifacts opened, and visual review limitations.
+  archive:
+    - Sync accepted deltas back into specs and context artifacts.
