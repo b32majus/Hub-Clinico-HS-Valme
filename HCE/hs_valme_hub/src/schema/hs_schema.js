@@ -46,6 +46,21 @@ export const SURGERY_FIELDS = [
   { checkbox: 'cirugia_urologia', note: 'consideraciones_urologia', label: 'Urologia' }
 ];
 
+export const DLQI_OPTION_SETS = {
+  standard: [
+    { label: 'Nada', value: 0 },
+    { label: 'Un poco', value: 1 },
+    { label: 'Bastante', value: 2 },
+    { label: 'Mucho', value: 3 }
+  ],
+  with_no_relation: [
+    { label: 'Sin relacion', value: 0 },
+    { label: 'Un poco', value: 1 },
+    { label: 'Bastante', value: 2 },
+    { label: 'Mucho', value: 3 }
+  ]
+};
+
 export const DLQI_ITEMS = [
   { text: '1. Durante los ultimos 7 dias, ha sentido picor, dolor o escozor en la piel?', optionSet: 'standard' },
   { text: '2. Durante los ultimos 7 dias, se ha sentido incomodo/a o cohibido/a debido a sus problemas de piel?', optionSet: 'standard' },
@@ -53,10 +68,18 @@ export const DLQI_ITEMS = [
   { text: '4. Durante los ultimos 7 dias, han influido sus problemas de piel en la eleccion de la ropa que lleva?', optionSet: 'with_no_relation' },
   { text: '5. Durante los ultimos 7 dias, han influido sus problemas de piel en cualquier actividad social o recreativa?', optionSet: 'with_no_relation' },
   { text: '6. Durante los ultimos 7 dias, ha tenido dificultades para hacer deporte debido a sus problemas de piel?', optionSet: 'with_no_relation' },
-  { text: '7. Durante los ultimos 7 dias, sus problemas de piel le han impedido totalmente trabajar o estudiar?', optionSet: 'work_or_study_main' },
+  { text: '7. Durante los ultimos 7 dias, sus problemas de piel le han impedido totalmente trabajar o estudiar?', optionSet: 'standard' },
   { text: '8. Durante los ultimos 7 dias, han causado sus problemas de piel dificultades con su pareja o sus amigos y familiares?', optionSet: 'with_no_relation' },
   { text: '9. Durante los ultimos 7 dias, han causado sus problemas de piel dificultades sexuales?', optionSet: 'with_no_relation' },
   { text: '10. Durante los ultimos 7 dias, le ha causado problemas el tratamiento de la piel, por ejemplo ensuciandole la casa o quitandole tiempo?', optionSet: 'with_no_relation' }
+];
+
+export const HSQOL_OPTIONS = [
+  { label: 'Nunca', value: 0 },
+  { label: 'Raramente', value: 1 },
+  { label: 'A veces', value: 2 },
+  { label: 'A menudo', value: 3 },
+  { label: 'Siempre', value: 4 }
 ];
 
 export const HSQOL_ITEMS = [

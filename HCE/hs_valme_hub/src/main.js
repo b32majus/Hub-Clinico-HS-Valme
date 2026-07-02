@@ -1,11 +1,13 @@
 import './ui/tokens.css';
 import './ui/shell.css';
 import './ui/components.css';
+import './ui/form.css';
 
 import * as schema from './schema/hs_schema.js';
 import { store } from './store.js';
 import { router } from './router.js';
 import { loadBase } from './excel/loader.js';
+import { createRegisterModule } from './form/register_module.js';
 
 window.ValmeHS = window.ValmeHS || {};
 window.ValmeHS.schema = schema;
@@ -260,7 +262,7 @@ function bootstrap() {
 
   router
     .register('home', homeModule())
-    .register('register', emptyStateModule('Registrar visita', 'Aqui se registraran las primeras visitas y seguimientos de hidradenitis supurativa.'))
+    .register('register', createRegisterModule())
     .register('patient', emptyStateModule('Ver paciente', 'Aqui se podra buscar un paciente por NUSHA y revisar su evolucion longitudinal.'))
     .register('service', emptyStateModule('Cuadro de mando', 'Aqui se mostraran los indicadores agregados del servicio y la poblacion activa.'))
     .register('load-base', loadBaseModule())

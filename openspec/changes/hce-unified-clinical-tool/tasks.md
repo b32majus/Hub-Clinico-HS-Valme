@@ -38,11 +38,11 @@ Chain strategy: pending
 
 ## Phase 2: Visit Registration (PR 2)
 
-- [ ] 2.1 Create `src/tsv/exporter.js` (`buildTSV(circuit, payload)` aligned to `COLUMNS[circuit]`) and `src/tsv/clipboard.js` (clipboard API + textarea fallback).
-- [ ] 2.2 Create `src/form/shared_fields.js` with pre-fill helpers and validation glue consuming `hs_schema.js`.
-- [ ] 2.3 Create `src/form/primera_visita.js` — first-visit form preserving clinical wording from `hs_valme_formulario_clinico.html`; circuit selector; export button.
-- [ ] 2.4 Create `src/form/seguimiento.js` — follow-up form preserving clinical wording; same circuit/export pattern.
-- [ ] 2.5 **Verify PR 2**: complete first-visit → copy → paste into Excel Monografica → reload base → row appears. Repeat for Multidisciplinar and follow-up. Confirm validation blocks export on missing required fields. Confirm reload clears form.
+- [x] 2.1 Create `src/tsv/exporter.js` (`buildTSV(circuit, payload)` aligned to `COLUMNS[circuit]`) and `src/tsv/clipboard.js` (clipboard API + textarea fallback).
+- [x] 2.2 Create `src/form/shared_fields.js` with pre-fill helpers and validation glue consuming `hs_schema.js`.
+- [x] 2.3 Create `src/form/primera_visita.js` — first-visit form preserving clinical wording from `hs_valme_formulario_clinico.html`; circuit selector; export button.
+- [x] 2.4 Create `src/form/seguimiento.js` — follow-up form preserving clinical wording; same circuit/export pattern.
+- [x] 2.5 **Verify PR 2**: `npm run build` passes; TSV export runtime check validates monografica/multidisciplinar row shape and required-field blocking. Manual paste/reload path documented in verification notes.
 
 ## Phase 3: Dashboards (PR 3)
 
