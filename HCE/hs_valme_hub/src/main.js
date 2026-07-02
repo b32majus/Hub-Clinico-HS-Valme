@@ -2,12 +2,15 @@ import './ui/tokens.css';
 import './ui/shell.css';
 import './ui/components.css';
 import './ui/form.css';
+import './ui/dashboard.css';
 
 import * as schema from './schema/hs_schema.js';
 import { store } from './store.js';
 import { router } from './router.js';
 import { loadBase } from './excel/loader.js';
 import { createRegisterModule } from './form/register_module.js';
+import { createLongitudinalView } from './patient/longitudinal.js';
+import { createServiceDashboardModule } from './service/dashboard_module.js';
 
 window.ValmeHS = window.ValmeHS || {};
 window.ValmeHS.schema = schema;
@@ -163,29 +166,6 @@ function bindBaseLoader() {
   });
 }
 
-/* Placeholder modules for Phase 1 */
-function emptyStateModule(title, message) {
-  return {
-    title,
-    render(container) {
-      container.innerHTML = `
-        <div class="card">
-          <h2 class="card__title">${title}</h2>
-          <p class="card__subtitle">${message}</p>
-          <div class="empty-state">
-            <svg class="empty-state__icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 8v4M12 16h.01" />
-            </svg>
-            <div class="empty-state__title">Modulo en construccion</div>
-            <p>Este modulo se implementa en la siguiente fase del hub.</p>
-          </div>
-        </div>
-      `;
-    }
-  };
-}
-
 function homeModule() {
   return {
     title: 'Inicio',
@@ -263,8 +243,8 @@ function bootstrap() {
   router
     .register('home', homeModule())
     .register('register', createRegisterModule())
-    .register('patient', emptyStateModule('Ver paciente', 'Aqui se podra buscar un paciente por NUSHA y revisar su evolucion longitudinal.'))
-    .register('service', emptyStateModule('Cuadro de mando', 'Aqui se mostraran los indicadores agregados del servicio y la poblacion activa.'))
+    .register('patient', createLongitudinalView())
+    .register('service', createServiceDashboardModule())
     .register('load-base', loadBaseModule())
     .mount(appContent);
 

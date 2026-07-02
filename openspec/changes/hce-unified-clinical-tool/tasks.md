@@ -46,10 +46,10 @@ Chain strategy: pending
 
 ## Phase 3: Dashboards (PR 3)
 
-- [ ] 3.1 Create `src/chart/chart_adapter.js` (vendored Chart.js wrapper) and `src/chart/themes.js` (design-token-aligned chart themes).
-- [ ] 3.2 Create `src/patient/search.js` (search by NUSHA/name) and `src/patient/longitudinal.js` (sections: Evolución IHS-4, Tratamientos, Peso, PROMs, Cirugía, Comorbilidades).
-- [ ] 3.3 Create `src/service/kpis.js` (aggregate indicators), `src/service/filters.js`, `src/service/list.js` (filtered patient list), `src/service/export.js` (secondary CSV/TSV labelled "secundario").
-- [ ] 3.4 **Verify PR 3**: search patient → sections render and match legacy dashboard for same input. Cuadro de mando → KPIs match legacy. Reload base → dashboards recalculate. Empty state when no base/no patient.
+- [x] 3.1 Create `src/chart/chart_adapter.js` (vendored Chart.js wrapper) and `src/chart/themes.js` (design-token-aligned chart themes).
+- [x] 3.2 Create `src/patient/search.js` (search by NUSHA/name) and `src/patient/longitudinal.js` (sections: Evolución IHS-4, Tratamientos, Peso, PROMs, Cirugía, Comorbilidades).
+- [x] 3.3 Create `src/service/kpis.js` (aggregate indicators), `src/service/filters.js`, `src/service/list.js` (filtered patient list), `src/service/export.js` (secondary CSV/TSV labelled "secundario").
+- [x] 3.4 **Verify PR 3**: search patient → sections render and match legacy dashboard for same input. Cuadro de mando → KPIs match legacy. Reload base → dashboards recalculate. Empty state when no base/no patient.
 
 ## Phase 4: Parity, Docs, Legacy (PR 4)
 
