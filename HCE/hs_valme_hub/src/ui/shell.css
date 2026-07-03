@@ -27,7 +27,9 @@ body {
   grid-template-areas:
     "header header"
     "sidebar content";
+  height: 100vh;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 .app-header {
@@ -83,6 +85,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .nav-group__label {
@@ -126,6 +130,7 @@ body {
 .app-main {
   grid-area: content;
   padding: var(--space-6);
+  min-height: 0;
   overflow-y: auto;
 }
 
@@ -224,6 +229,9 @@ body {
       "header"
       "sidebar"
       "content";
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
   }
 
   .app-sidebar {
@@ -232,6 +240,7 @@ body {
     border-right: none;
     border-bottom: 1px solid var(--color-border);
     padding: var(--space-3);
+    overflow-y: visible;
   }
 
   .nav-group {
